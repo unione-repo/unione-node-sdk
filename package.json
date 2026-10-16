@@ -1,0 +1,92 @@
+{
+  "name": "unione",
+  "version": "2.1.2",
+  "description": "UniOne Web API client library for Node.js",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./client": {
+      "types": "./src/client/index.d.ts",
+      "default": "./src/client/index.js"
+    },
+    "./common": {
+      "types": "./src/common/index.d.ts",
+      "default": "./src/common/index.js"
+    },
+    "./api/email": {
+      "types": "./src/api/email/index.d.ts",
+      "default": "./src/api/email/index.js"
+    },
+    "./api/email-validation": {
+      "types": "./src/api/email-validation/index.d.ts",
+      "default": "./src/api/email-validation/index.js"
+    },
+    "./api/confirmed-email": {
+      "types": "./src/api/confirmed-email/index.d.ts",
+      "default": "./src/api/confirmed-email/index.js"
+    },
+    "./api/template": {
+      "types": "./src/api/template/index.d.ts",
+      "default": "./src/api/template/index.js"
+    },
+    "./api/webhook": {
+      "types": "./src/api/webhook/index.d.ts",
+      "default": "./src/api/webhook/index.js"
+    },
+    "./api/suppression": {
+      "types": "./src/api/suppression/index.d.ts",
+      "default": "./src/api/suppression/index.js"
+    },
+    "./api/domain": {
+      "types": "./src/api/domain/index.d.ts",
+      "default": "./src/api/domain/index.js"
+    },
+    "./api/event-dump": {
+      "types": "./src/api/event-dump/index.d.ts",
+      "default": "./src/api/event-dump/index.js"
+    },
+    "./api/tag": {
+      "types": "./src/api/tag/index.d.ts",
+      "default": "./src/api/tag/index.js"
+    },
+    "./api/project": {
+      "types": "./src/api/project/index.d.ts",
+      "default": "./src/api/project/index.js"
+    },
+    "./api/system": {
+      "types": "./src/api/system/index.d.ts",
+      "default": "./src/api/system/index.js"
+    },
+    "./api/obsolete": {
+      "types": "./src/api/obsolete/index.d.ts",
+      "default": "./src/api/obsolete/index.js"
+    }
+  },
+  "files": [
+    "src",
+    "docs",
+    "README.md",
+    "AGENTS.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "unione",
+    "email",
+    "api",
+    "sdk",
+    "typescript"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unione-repo/unione-node-sdk.git"
+  },
+  "homepage": "https://docs.unione.io/en/web-api-ref"
+}
