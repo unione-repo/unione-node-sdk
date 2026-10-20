@@ -36,7 +36,7 @@ export function extraFields(data, names) {
 }
 
 /** The SDK and its version in the "platform" query parameter of every request. */
-export const PLATFORM = "node-sdk.1.1.2";
+export const PLATFORM = "node-sdk.1.1.3";
 
 /**
  * Sets a header, replacing one of the same name in another case.
