@@ -421,6 +421,10 @@ export declare class MessageObjectRecipientsItem {
   metadata?: Record<string, string>;
   /** Builds the object from decoded JSON. */
   static fromJSON(data: Record<string, any>): MessageObjectRecipientsItem;
+  /** A recipient from "email" or "Name <email>": the name goes to the to_name substitution. */
+  static fromAddress(address: string, substitutions?: Record<string, string>): MessageObjectRecipientsItem;
+  /** Sets the metadata of the recipient (returned in its webhook events) and returns the recipient. */
+  withMetadata(metadata: Record<string, string>): this;
   /** JSON-ready object in the API format, empty fields are omitted. */
   toJSON(): MessageObjectRecipientsItemJSON;
 }

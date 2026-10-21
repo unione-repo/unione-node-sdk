@@ -85,6 +85,25 @@ export class BodyObject {
   }
 
   /**
+   * An HTML body, with an optional plain-text part.
+   * @param {string} html
+   * @param {string} [plaintext]
+   * @returns {BodyObject}
+   */
+  static html(html, plaintext) {
+    return new BodyObject({ html: html, plaintext: plaintext });
+  }
+
+  /**
+   * A plain-text body.
+   * @param {string} plaintext
+   * @returns {BodyObject}
+   */
+  static text(plaintext) {
+    return new BodyObject({ plaintext: plaintext });
+  }
+
+  /**
    * JSON-ready object in the API format, empty fields are omitted.
    * @returns {Record<string, any>}
    */

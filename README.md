@@ -1,10 +1,12 @@
-# UniOne Node.js SDK 1.1.3
+# UniOne Node.js SDK
 
-Web API 1.90
+[![Node.js](https://img.shields.io/npm/v/unione)](https://www.npmjs.com/package/unione) [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 Official Node.js library for the [UniOne](https://unione.io) transactional email API.
 
-Quickstart guide: [Send emails with Node.js](https://docs.unione.io/en/send-with-nodejs) · Docs for LLMs: [llms.txt](https://docs.unione.io/llms.txt) · [API reference](https://docs.unione.io/en/web-api-ref)
+[API reference](https://docs.unione.io/en/web-api-ref) · Docs for LLMs: [llms.txt](https://docs.unione.io/llms.txt)
+
+> **On Express or NestJS?** Install [`unione-express`](https://github.com/unione-repo/unione-express) or [`unione-nestjs`](https://github.com/unione-repo/unione-nestjs) instead: this SDK plus configuration, a mailer and a webhook route.
 
 ## Install
 
@@ -16,104 +18,214 @@ Requirements: Node.js 14+. No third-party dependencies.
 
 This is the 1.x line (branch `1.x`) for Node.js 14. Newer runtimes: the 2.x line (branch `main`), the same API.
 
-## Get an API key
-
-1. Sign up at [cp.unione.io](https://cp.unione.io/en/user/registration/).
-2. Copy your API key from [Settings → Security → API](https://cp.unione.io/en/settings/security/api).
-3. Put it in an environment variable:
+Get an API key in the [control panel](https://cp.unione.io/en/settings/security/api) and keep it in the environment, never in code:
 
 ```bash
 export UNIONE_API_KEY="your-api-key"
 ```
 
-> **Server-side only.** Use this SDK in backend code: API routes, server functions, workers.
-> Never ship the API key to a browser or a mobile app, and never commit it.
-
-## Send your first email — no DNS setup
-
-Every account can send test email right away from a **sandbox domain**: pre-verified, DKIM and SPF already set.
-It delivers only to addresses you confirm.
-
-<!-- checked examples -->
-
-**1. Get your sandbox domain** (`domain/get-sandbox-domain`). The call creates the domain on first use and returns the same one afterwards.
+## Send an email
 
 ```javascript
 import { UniOneClient } from "unione";
+import { MessageObjectRecipientsItem as Recipient } from "unione/api/email";
 
 const client = new UniOneClient(process.env.UNIONE_API_KEY);
 
-const response = await client.domain.getSandboxDomain();
-console.log(response.domain);
+const { jobId } = await client.email.send({
+  message: {
+    recipients: [Recipient.fromAddress("Alex <alex@example.com>")],
+    from_email: "shop@example.com",
+    from_name: "Shop",
+    subject: "Your order",
+    body: { html: "<p>Hello, {{to_name}}! Your order has shipped.</p>" },
+  },
+});
+console.log(jobId);
 ```
 
-**2. Confirm your inbox** (`confirmed-email/create`). UniOne sends a confirmation email; click the link in it within 48 hours.
+The sender address must be on a domain verified in your account. No domain yet? Send from the [sandbox domain](#no-domain-yet-the-test-sandbox-domain) in three steps.
+
+## Contents
+
+- [Recipes](#recipes): personalization · attachments · CC and BCC · scheduling · safe retries · errors · webhooks
+- [No domain yet: the test sandbox domain](#no-domain-yet-the-test-sandbox-domain)
+- [Going to production](#going-to-production)
+- [Reference](#reference)
+- [Help](#help)
+
+## Recipes
+
+Every recipe continues the example above: the client and its imports are there.
+
+### Personalize for each recipient
+
+Up to 500 recipients per call, each gets a separate copy with its own substitutions. Metadata of a recipient comes back in its webhook events.
 
 ```javascript
-import { UniOneClient } from "unione";
-import { ConfirmedEmailRequest } from "unione/api/confirmed-email";
-
-const client = new UniOneClient(process.env.UNIONE_API_KEY);
-
-const response = await client.confirmedEmail.create(new ConfirmedEmailRequest({
-  email: "you@example.com",
-}));
-console.log(response.confirmedEmail);
-```
-
-Check the status with `confirmed-email/list` — your address should show `"status": "confirmed"`.
-
-**3. Send the email** (`email/send`) from any address on the sandbox domain to the confirmed address.
-
-```javascript
-import { UniOneClient } from "unione";
-import { EmailSendRequest, MessageObject, MessageObjectRecipientsItem } from "unione/api/email";
-import { BodyObject } from "unione/common";
-
-const client = new UniOneClient(process.env.UNIONE_API_KEY);
-
-const response = await client.email.send(new EmailSendRequest({
-  message: new MessageObject({
+await client.email.send({
+  message: {
     recipients: [
-      new MessageObjectRecipientsItem({
-        email: "you@example.com",
-      }),
+      Recipient.fromAddress("Alex <alex@example.com>", { order: "1001" })
+        .withMetadata({ user_id: "42" }),
+      Recipient.fromAddress("Maria <maria@example.com>", { order: "1002" })
+        .withMetadata({ user_id: "43" }),
     ],
-    body: new BodyObject({
-      html: "<p>It works!</p>",
-    }),
+    from_email: "shop@example.com",
+    subject: "Order #{{order}}",
+    body: { html: "<p>{{to_name}}, order #{{order}} has shipped.</p>" },
+  },
+});
+```
+
+### Attach a file
+
+```javascript
+import { readFile } from "node:fs/promises";
+
+const content = (await readFile("invoice.pdf")).toString("base64");
+
+await client.email.send({
+  message: {
+    recipients: [Recipient.fromAddress("alex@example.com")],
+    from_email: "shop@example.com",
+    subject: "Invoice",
+    body: { html: "<p>Your invoice is attached.</p>" },
+    attachments: [{ type: "application/pdf", name: "invoice.pdf", content }],
+  },
+});
+```
+
+### CC and BCC
+
+Every address goes to `recipients` (each gets a copy); the visible ones also go to the headers. `audit@example.com` is in neither header: a BCC. The rules and limits: [CC and BCC](https://docs.unione.io/en/cc-and-bcc).
+
+```javascript
+await client.email.send({
+  message: {
+    recipients: ["alex@example.com", "boss@example.com", "audit@example.com"].map((a) => Recipient.fromAddress(a)),
+    from_email: "shop@example.com",
+    subject: "Weekly report",
+    body: { html: "<p>The report is attached.</p>" },
+    headers: { To: "alex@example.com", CC: "boss@example.com" },
+  },
+});
+```
+
+### Schedule
+
+`send_at` is UTC, up to 24 hours ahead.
+
+```javascript
+// UTC, "YYYY-MM-DD hh:mm:ss"
+const inOneHour = new Date(Date.now() + 3600_000).toISOString().slice(0, 19).replace("T", " ");
+
+await client.email.send({
+  message: {
+    recipients: [Recipient.fromAddress("alex@example.com")],
+    from_email: "shop@example.com",
+    subject: "Reminder",
+    body: { plaintext: "See you tomorrow!" },
+    options: { send_at: inOneHour },
+  },
+});
+```
+
+### Retry safely
+
+A repeat with the same `idempotence_key` within a minute is not sent twice: retry network errors, timeouts, 429 and 5xx with it.
+
+```javascript
+await client.email.send({
+  message: {
+    recipients: [Recipient.fromAddress("alex@example.com")],
+    from_email: "shop@example.com",
+    subject: "Reset your password",
+    body: { html: "<p>Use this link to reset your password.</p>" },
+    idempotence_key: "password-reset-8f3a",
+  },
+});
+```
+
+### Handle errors
+
+Recipients the API drops (unsubscribed, invalid, suppressed) are not an error: they are in `failed_emails` of the response, the rest still get the message.
+
+```javascript
+import { ApiError } from "unione";
+
+try {
+  await client.email.send(request);
+} catch (e) {
+  if (!(e instanceof ApiError)) throw e;
+  // HTTP status (0: network error or timeout), API error code, message
+  console.error(e.httpStatus, e.errorCode, e.message);
+}
+```
+
+### Receive delivery events
+
+Register your HTTPS endpoint once (`webhook/set`). Then check the signature of every notification (`auth`: MD5 of the raw body with the `auth` value replaced by your API key; a wrong one gets 401) and process the events.
+
+```javascript
+import { createHash } from "node:crypto";
+import { WebhookApi } from "unione/api/webhook";
+
+// rawBody: the body of the POST request as received; returns the HTTP status to answer
+function handleWebhook(rawBody) {
+  const callback = WebhookApi.parseCallback(rawBody);
+  // auth: MD5 of the raw body with the auth value replaced by your API key
+  const signed = rawBody.replace(callback.auth, process.env.UNIONE_API_KEY);
+  if (createHash("md5").update(signed).digest("hex") !== callback.auth) return 401;
+
+  for (const user of callback.eventsByUser ?? []) {
+    for (const event of user.events ?? []) {
+      // event.eventData: email, status (delivered, opened, hard_bounced, spam, ...), jobId, metadata
+    }
+  }
+  return 200;
+}
+```
+
+> **Answer 200 within 3 seconds** and process the events in the background (a queue): otherwise UniOne repeats the request every 10 minutes for 24 hours (`retry_count` grows), and a handler that failed every request for at least 10 events of a day is turned inactive. The handler must take at least **5 parallel requests of up to 100 events each**; deduplicate, a repeat delivers the same events again.
+
+## No domain yet: the test sandbox domain
+
+Until your domain is verified, send from the **sandbox domain**: a test domain every account has, already verified, with DKIM and SPF set. It delivers only to addresses you confirm (the confirmation link comes by email, valid 48 hours), up to 100 emails a day. The sandbox domain is deleted 31 days after it was created, but you can get it again: the next `domain/get-sandbox-domain` call creates a new one (with a new name, so read it from the call, do not hardcode it).
+
+```javascript
+// 1. Your sandbox domain: created on the first call, the same one afterwards
+const { domain } = await client.domain.getSandboxDomain();
+
+// 2. Confirm your inbox: UniOne sends a link, click it within 48 hours
+await client.confirmedEmail.create({ email: "you@example.com" });
+
+// 3. Send from any address on the sandbox domain to the confirmed one
+await client.email.send({
+  message: {
+    recipients: [Recipient.fromAddress("you@example.com")],
+    from_email: `noreply@${domain}`,
     subject: "Hello from UniOne",
-    fromEmail: "noreply@<sandbox-domain>",
-  }),
-}));
-console.log(response.jobId);
+    body: { html: "<p>It works!</p>" },
+  },
+});
 ```
 
-<!-- /checked examples -->
+<details>
+<summary>Sandbox limits</summary>
 
-### What you get back
+- Sends only to confirmed addresses: up to 10 per account.
+- Up to 100 emails a day.
+- The sandbox domain expires after 31 days; call `domain/get-sandbox-domain` again to get a new one.
+- Works only with the account API key, not a project key.
+- Not listed in `domain/list`; the other `domain/*` methods do not apply to it.
 
-```json
-{
-  "status": "success",
-  "job_id": "1ZymBc-00041N-9X",
-  "emails": [
-    "you@example.com"
-  ]
-}
-```
+The sandbox is for development and testing. Do not use a sandbox domain as the sender in production.
 
-On error the API returns `status: "error"`, a `message` and a numeric `code`:
+</details>
 
-```json
-{
-  "status": "error",
-  "code": 102,
-  "message": "Error ID:83274F98-C7D5-11F1-B221-6214FF8707B1. Can not decode key wrongkey"
-}
-```
-
-### Same flow with curl
+<details>
+<summary>The same with curl</summary>
 
 ```bash
 BASE=https://api.unione.io/en/transactional/api/v1
@@ -143,58 +255,51 @@ curl -s -X POST $BASE/email/send.json \
       }'
 ```
 
-## Sandbox limits
+</details>
 
-- Sends only to confirmed addresses: up to 10 per account.
-- Up to 100 emails a day.
-- The sandbox domain expires after 31 days; call `domain/get-sandbox-domain` again to get a new one.
-- Works only with the account API key, not a project key.
-- Not listed in `domain/list`; the other `domain/*` methods do not apply to it.
+## Going to production
 
-The sandbox is for development and testing. Do not use a sandbox domain as the sender in production.
+**1. Verify your sending domain.** `domain/get-dns-records` returns the verification record, the DKIM key and the DMARC target; add the records at your DNS provider, then `domain/validate-verification-record` and `domain/validate-dkim`.
 
-## Before production: verify your domain
+| Type | Host | Value | Where it comes from |
+|---|---|---|---|
+| TXT | `@` | `unione-validate-hash=…` | `verification-record` of the response, as is |
+| TXT | `<selector>._domainkey` (the selector is on the domain page of the control panel, e.g. `us`) | `v=DKIM1; k=rsa; p=<dkim>` | `dkim` of the response after `v=DKIM1; k=rsa; p=` |
+| TXT | `@` | `v=spf1 include:spf.unione.io ~all` | not in the response; add the include to your SPF record if you have one |
+| CNAME | `_dmarc` | `<domain>.dmarc.…` | `dmarc` of the response (UniOne publishes the DMARC policy); keep your own DMARC TXT record instead if the domain has one |
 
-1. `domain/get-dns-records` — returns the values for your DNS records.
-2. Add these records at your DNS provider (the domain page of the control panel shows them too):
+**2. Make sending reliable.**
 
-   | Type | Host | Value |
-   |---|---|---|
-   | TXT | `@` | the `verification-record` value (`unione-validate-hash=…`) |
-   | TXT | `<selector>._domainkey` (the selector is on the domain page of the control panel, e.g. `us`) | `v=DKIM1; k=rsa; p=<dkim>` |
-   | TXT | `@` | `v=spf1 include:spf.unione.io ~all` |
-   | CNAME | `_dmarc` | the `dmarc` value |
+| | |
+|---|---|
+| Retries | `429` and `5xx` with backoff and the same `idempotence_key`; fix other errors instead of retrying |
+| Limits | 500 recipients and 10 MB per request, attachments included: base64 makes a file about a third larger |
+| Body | always `html` or `plaintext` (a template can supply it) |
+| Delivery status | a webhook, not polling |
+| Queue | send from a background job, not inside the web request |
+| Config | `from_email` from config, so the sandbox → production switch needs no code change |
+| Defaults | keep the unsubscribe footer and tracking; changing them needs UniOne support |
 
-3. `domain/validate-verification-record`, then `domain/validate-dkim`.
-4. `domain/list` — wait until the verification record is confirmed and DKIM is active.
-5. Read `from_email` from your config, so switching from the sandbox needs no code change.
+## Reference
 
-## Sending reliably
+### Sections
 
-- **Retries:** set `message.idempotence_key` on sends that may be retried, so a repeated request does not send twice.
-- **Limits:** up to 500 recipients and 10 MB per request; each attachment up to 7 MB.
-- **Body:** always include `body.html` or `body.plaintext`.
-- **Delivery status:** register a webhook (`webhook/set`) with a fast, idempotent HTTPS handler instead of polling.
-- **Defaults:** keep the default unsubscribe footer and tracking; changing them requires UniOne support.
-- **Errors:** retry `429` and `5xx` with backoff; do not retry other errors unchanged.
+| Section | Methods | Description |
+|---|---|---|
+| [Email](docs/Email.md) | `send`, `subscribe` | This group of methods is related with email sending. |
+| [EmailValidation](docs/EmailValidation.md) | `single` | Email validation methods. As a result of the check, you’ll get detailed information on email validity. It will help eliminate nonexistent emails, decrease the number of complaints, clean up the subscribers list and eventually enhance your sender reputation score. For example, you may add validation to a subscription form on your site to let users know they’ve just entered an invalid address. |
+| [ConfirmedEmail](docs/ConfirmedEmail.md) | `create`, `list`, `delete` | Manage email addresses confirmed for sandbox-domain sending. These methods are available only with a main account API key. |
+| [Template](docs/Template.md) | `set`, `get`, `list`, `delete` | You have the option of storing a template on the UniOne side and then using it by id, which is highly recommended for sending repetitive messages or high volume traffic. UniOne supports two different [template engines](https://docs.unione.io/en/template-engines). |
+| [Webhook](docs/Webhook.md) | `set`, `get`, `list`, `delete` | UniOne lets you recieve notifications about email status changes or spam blocks. You provide an URL and every time a watched event occurs we will notify you by submitting a request with JSON data to this URL. |
+| [Suppression](docs/Suppression.md) | `set`, `get`, `list`, `delete` | Methods for managing suppression lists. An email can be added to suppression list because of unsubscription, bounce or complain. |
+| [Domain](docs/Domain.md) | `getDnsRecords`, `validateVerificationRecord`, `validateDkim`, `list`, `getSandboxDomain`, `delete` | You can use these methods to setup sender domains and check their statuses. They might be useful in case you want to automate adding domains for your own clients. |
+| [EventDump](docs/EventDump.md) | `create`, `get`, `list`, `delete` | These methods are used to obtain a list of events for a given period of time. The data is stored for up to 45 days, depending on your tariff, i. e. you may fetch all event data starting from 00:00:00 31 days ago and up to current time. For custom tarifs with big sending volumes event dumps are available only for the last 7 days. |
+| [Tag](docs/Tag.md) | `list`, `delete` | This family of methods is used to manage user-defined tags. Tags are used to categorize letters based on your own criteria, e. g. to create a distinction between marketing and transactional letters or group together all notifications for a particular order type. UniOne allows you to assign tags to all outgoing emails, and the tags you’ve set may then be used to filter and analyze delivery statistics. |
+| [Project](docs/Project.md) | `create`, `update`, `list`, `delete` | Projects allow you to group several independent domains, webhooks, templates, and unsubscription lists together. It's very useful if you have your own clients and manage their data from a single UniOne account. Each project receives its own API key, and all API calls with that API key only deal with the data of that project. This way, you can assign a separate project for each client and be sure that they won't conflict; e.g. unsubscribing from one project won't affect another. |
+| [System](docs/System.md) | `ping`, `info` | System operations. |
+| [Obsolete](docs/Obsolete.md) | `unsubscribedSet`, `unsubscribedCheck`, `unsubscribedList` | Obsolete methods dealing with unsubscribes. We recommend using the more flexible [suppression](https://docs.unione.io/en/web-api-ref#suppression) methods instead. Note that you can't resubscribe an unsubscribed recipient using WebAPI, but you can send him an email with subscription link using email/subscribe method. |
 
-## Links
-
-- [Send emails with Node.js](https://docs.unione.io/en/send-with-nodejs) and other [integration guides](https://docs.unione.io/en/integrations/)
-- [Web API reference](https://docs.unione.io/en/web-api-ref)
-- [llms.txt](https://docs.unione.io/llms.txt) for AI coding agents
-- [UniOne MCP server and agent setup](https://unione.io/en/agents)
-- [Support](https://cp.unione.io/en/support)
-
-## For SDK contributors
-
-See [AGENTS.md](AGENTS.md): how this SDK is generated from the OpenAPI spec, built, tested and released.
-
----
-
-# SDK reference
-
-## API host
+### API host
 
 The second argument selects the API host (datacenter) or a full base URL.
 
@@ -205,11 +310,11 @@ const client = new UniOneClient("YOUR_API_KEY", "us1.unione.io");
 const other = new UniOneClient("YOUR_API_KEY", Host.US1, { timeout: 10000 });
 ```
 
-## Error handling
+### Error handling
 
 Every method raises `ApiError` when the API returns an error; it carries the [API error code](https://docs.unione.io/en/web-api-ref#api-errors) and the HTTP status.
 
-## Custom HTTP client and headers
+### Custom HTTP client and headers
 
 `headers` adds headers to every request; `fetch` replaces the function the requests go through (default: the built-in `http`/`https` modules): undici, node-fetch or a wrapper that adds retries, logging or a proxy. Network errors, timeouts and errors of reading the response raise `ApiError` (the original error is its `cause`).
 
@@ -243,7 +348,7 @@ try {
 }
 ```
 
-## Models
+### Models
 
 Request models take an object of their fields; a nested model can be given as a model or as a plain object in the API format (the keys of the API: `global_language`, not `globalLanguage`), it is converted by `fromJSON()` of its class. A request may also be a plain object in the API format. Models that take any key (`HeadersObject`) keep the keys besides their named fields in the `extra` map: it is sent next to the fields (a named field wins over the same key of `extra`), and the keys of a response that are not named fields go there.
 
@@ -271,7 +376,7 @@ const request = new EmailSendRequest({
 console.log(JSON.stringify(request));
 ```
 
-## TypeScript
+### TypeScript
 
 The package has type declarations: the client, the API classes, the models (with their `...JSON` shape in the API format and `...Init` constructor options) and the enums (frozen objects and string literal types).
 
@@ -315,19 +420,9 @@ const response: EmailSendResponse = await client.email.send(new EmailSendRequest
 }));
 ```
 
-## Sections
+## Help
 
-| Section | Methods | Description |
-|---|---|---|
-| [Email](docs/Email.md) | `send`, `subscribe` | This group of methods is related with email sending. |
-| [EmailValidation](docs/EmailValidation.md) | `single` | Email validation methods. As a result of the check, you’ll get detailed information on email validity. It will help eliminate nonexistent emails, decrease the number of complaints, clean up the subscribers list and eventually enhance your sender reputation score. For example, you may add validation to a subscription form on your site to let users know they’ve just entered an invalid address. |
-| [ConfirmedEmail](docs/ConfirmedEmail.md) | `create`, `list`, `delete` | Manage email addresses confirmed for sandbox-domain sending. These methods are available only with a main account API key. |
-| [Template](docs/Template.md) | `set`, `get`, `list`, `delete` | You have the option of storing a template on the UniOne side and then using it by id, which is highly recommended for sending repetitive messages or high volume traffic. UniOne supports two different [template engines](https://docs.unione.io/en/template-engines). |
-| [Webhook](docs/Webhook.md) | `set`, `get`, `list`, `delete` | UniOne lets you recieve notifications about email status changes or spam blocks. You provide an URL and every time a watched event occurs we will notify you by submitting a request with JSON data to this URL. |
-| [Suppression](docs/Suppression.md) | `set`, `get`, `list`, `delete` | Methods for managing suppression lists. An email can be added to suppression list because of unsubscription, bounce or complain. |
-| [Domain](docs/Domain.md) | `getDnsRecords`, `validateVerificationRecord`, `validateDkim`, `list`, `getSandboxDomain`, `delete` | You can use these methods to setup sender domains and check their statuses. They might be useful in case you want to automate adding domains for your own clients. |
-| [EventDump](docs/EventDump.md) | `create`, `get`, `list`, `delete` | These methods are used to obtain a list of events for a given period of time. The data is stored for up to 45 days, depending on your tariff, i. e. you may fetch all event data starting from 00:00:00 31 days ago and up to current time. For custom tarifs with big sending volumes event dumps are available only for the last 7 days. |
-| [Tag](docs/Tag.md) | `list`, `delete` | This family of methods is used to manage user-defined tags. Tags are used to categorize letters based on your own criteria, e. g. to create a distinction between marketing and transactional letters or group together all notifications for a particular order type. UniOne allows you to assign tags to all outgoing emails, and the tags you’ve set may then be used to filter and analyze delivery statistics. |
-| [Project](docs/Project.md) | `create`, `update`, `list`, `delete` | Projects allow you to group several independent domains, webhooks, templates, and unsubscription lists together. It's very useful if you have your own clients and manage their data from a single UniOne account. Each project receives its own API key, and all API calls with that API key only deal with the data of that project. This way, you can assign a separate project for each client and be sure that they won't conflict; e.g. unsubscribing from one project won't affect another. |
-| [System](docs/System.md) | `ping`, `info` | System operations. |
-| [Obsolete](docs/Obsolete.md) | `unsubscribedSet`, `unsubscribedCheck`, `unsubscribedList` | Obsolete methods dealing with unsubscribes. We recommend using the more flexible [suppression](https://docs.unione.io/en/web-api-ref#suppression) methods instead. Note that you can't resubscribe an unsubscribed recipient using WebAPI, but you can send him an email with subscription link using email/subscribe method. |
+- [Integration guides](https://docs.unione.io/en/integrations)
+- AI coding agents: [llms.txt](https://docs.unione.io/llms.txt), the [MCP server](https://unione.io/en/agents), skills: `npx skills add https://github.com/unione-repo/unione-skills.git`
+- [Support](https://cp.unione.io/en/support) · [Issues](https://github.com/unione-repo/unione-node-sdk/issues)
+- Contributing: [AGENTS.md](AGENTS.md) — the SDK is generated from the OpenAPI spec.
