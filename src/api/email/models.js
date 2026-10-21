@@ -382,6 +382,35 @@ export class MessageObjectRecipientsItem {
   }
 
   /**
+   * A recipient from "email" or "Name <email>": the name goes to the to_name substitution (the name in the
+   * "To" header).
+   * @param {string} address
+   * @param {Record<string, string>} [substitutions] More substitutions of the recipient.
+   * @returns {MessageObjectRecipientsItem}
+   */
+  static fromAddress(address, substitutions) {
+    let email = String(address).trim();
+    let name = "";
+    const match = /^(.*)<([^>]+)>$/s.exec(email);
+    if (match) {
+      email = match[2].trim();
+      name = match[1].trim().replace(/^"|"$/g, "");
+    }
+    const subs = name ? { to_name: name, ...substitutions } : substitutions;
+    return new MessageObjectRecipientsItem({ email: email, substitutions: subs });
+  }
+
+  /**
+   * Sets the metadata of the recipient (returned in its webhook events) and returns the recipient.
+   * @param {Record<string, string>} metadata
+   * @returns {this}
+   */
+  withMetadata(metadata) {
+    this.metadata = metadata;
+    return this;
+  }
+
+  /**
    * JSON-ready object in the API format, empty fields are omitted.
    * @returns {Record<string, any>}
    */

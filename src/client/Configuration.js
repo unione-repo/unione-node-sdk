@@ -36,7 +36,7 @@ export class Configuration {
    *   that uses the SDK and its version (e.g. "express.1.0.0"), sent in the "platform" query parameter before the SDK
    *   one (PLATFORM); headers: extra headers of every request; fetch: a fetch-compatible function, default: globalThis.fetch.
    */
-  constructor(apiKey, { baseUrl = DEFAULT_BASE_URL, timeout = 30000, userAgent = "unione-node-sdk/2.1.3", platform, headers = {}, fetch } = {}) {
+  constructor(apiKey, { baseUrl = DEFAULT_BASE_URL, timeout = 30000, userAgent = "unione-node-sdk/2.2.3", platform, headers = {}, fetch } = {}) {
     this.apiKey = apiKey;
     this.baseUrl = baseUrl.replace(/\/+$/, "");
     this.timeout = timeout;
