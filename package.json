@@ -1,6 +1,6 @@
 {
   "name": "unione",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "UniOne Web API client library for Node.js",
   "type": "module",
   "main": "./src/index.js",
