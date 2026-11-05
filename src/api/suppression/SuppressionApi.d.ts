@@ -1,7 +1,7 @@
 // SuppressionApi: API methods of the Suppression section.
 import type { ApiClient } from "../../client/ApiClient.js";
 import type { SuccessResponse } from "../../common/models.js";
-import type { SuppressionDeleteRequest, SuppressionDeleteRequestJSON, SuppressionGetRequest, SuppressionGetRequestJSON, SuppressionGetResponse, SuppressionListRequest, SuppressionListRequestJSON, SuppressionListResponse, SuppressionSetRequest, SuppressionSetRequestJSON } from "./models.js";
+import type { SuppressionDeleteRequest, SuppressionDeleteRequestInput, SuppressionGetRequest, SuppressionGetRequestInput, SuppressionGetResponse, SuppressionListRequest, SuppressionListRequestInput, SuppressionListResponse, SuppressionSetRequest, SuppressionSetRequestInput } from "./models.js";
 
 /**
  * Methods for managing suppression lists. An email can be added to suppression list because of
@@ -19,7 +19,7 @@ export declare class SuppressionApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#suppression-set
    * @throws {ApiError}
    */
-  set(request: SuppressionSetRequest | SuppressionSetRequestJSON): Promise<SuccessResponse>;
+  set(request: SuppressionSetRequest | SuppressionSetRequestInput): Promise<SuccessResponse>;
 
   /**
    * Gets a reason and date of email suppression.
@@ -27,7 +27,7 @@ export declare class SuppressionApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#suppression-get
    * @throws {ApiError}
    */
-  get(request: SuppressionGetRequest | SuppressionGetRequestJSON): Promise<SuppressionGetResponse>;
+  get(request: SuppressionGetRequest | SuppressionGetRequestInput): Promise<SuppressionGetResponse>;
 
   /**
    * Returns a suppression list since provided date.
@@ -35,7 +35,7 @@ export declare class SuppressionApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#suppression-list
    * @throws {ApiError}
    */
-  list(request?: SuppressionListRequest | SuppressionListRequestJSON): Promise<SuppressionListResponse>;
+  list(request?: SuppressionListRequest | SuppressionListRequestInput): Promise<SuppressionListResponse>;
 
   /**
    * Deletes an email from suppression list (only records with is_deletable=true). If there are no
@@ -46,5 +46,5 @@ export declare class SuppressionApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#suppression-delete
    * @throws {ApiError}
    */
-  delete(request: SuppressionDeleteRequest | SuppressionDeleteRequestJSON): Promise<SuccessResponse>;
+  delete(request: SuppressionDeleteRequest | SuppressionDeleteRequestInput): Promise<SuccessResponse>;
 }

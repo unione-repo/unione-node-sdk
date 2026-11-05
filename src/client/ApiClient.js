@@ -1,6 +1,7 @@
 import http from "http";
 import https from "https";
-import { ApiError } from "./ApiError.js";
+import { ApiError, ErrorKind } from "./ApiError.js";
+import { apiMessage, codeOf, hintOf, invalidRequest, methodOf, missingField, quote, transportError } from "./errors.js";
 
 /** Removes undefined/null fields, used by the models' toJSON(). */
 export function compact(object) {
@@ -36,7 +37,7 @@ export function extraFields(data, names) {
 }
 
 /** The SDK and its version in the "platform" query parameter of every request. */
-export const PLATFORM = "node-sdk.1.2.4";
+export const PLATFORM = "node-sdk.1.3.0";
 
 /**
  * Sets a header, replacing one of the same name in another case.
@@ -53,9 +54,14 @@ function setHeader(headers, name, value) {
   headers[name] = String(value);
 }
 
-/** @param {unknown} error */
-function messageOf(error) {
-  return error instanceof Error ? error.message : String(error);
+/**
+ * The error of the time limit of a request (name "TimeoutError", like the one of AbortSignal.timeout()).
+ * @param {number} timeout
+ */
+function timeoutError(timeout) {
+  const error = new Error(`timeout of ${timeout} ms exceeded`);
+  error.name = "TimeoutError";
+  return error;
 }
 
 /**
@@ -72,7 +78,7 @@ async function fetchText(send, url, init, timeout, result) {
   let timer;
   const expired = new Promise((resolve, reject) => {
     timer = setTimeout(() => {
-      reject(new Error(`timeout of ${timeout} ms exceeded`));
+      reject(timeoutError(timeout));
       if (controller) {
         controller.abort();
       }
@@ -114,7 +120,7 @@ function post(url, headers, payload, timeout) {
       response.on("error", fail);
       response.on("aborted", () => fail(new Error("the response was aborted")));
     });
-    timer = setTimeout(() => request.destroy(new Error(`timeout of ${timeout} ms exceeded`)), timeout);
+    timer = setTimeout(() => request.destroy(timeoutError(timeout)), timeout);
     request.on("error", fail);
     request.end(payload);
   });
@@ -166,7 +172,21 @@ export class ApiClient {
    * @throws {ApiError}
    */
   async call(path, body = {}) {
-    const json = JSON.stringify(body ?? {});
+    const method = methodOf(path);
+    if (!this.config.apiKey) {
+      throw invalidRequest(method, "the API key is empty: pass the API key of the user or of the project to the client");
+    }
+    let json;
+    try {
+      json = JSON.stringify(body ?? {});
+    } catch (error) {
+      throw invalidRequest(method, `can not encode the request: ${error instanceof Error ? error.message : String(error)}`,
+        error);
+    }
+    const missing = missingField(method, JSON.parse(json));
+    if (missing !== null) {
+      throw invalidRequest(method, `${missing} is required`);
+    }
     let result = { status: 0, text: "" };
     try {
       if (this.config.fetch) {
@@ -178,7 +198,7 @@ export class ApiClient {
           payload, this.config.timeout);
       }
     } catch (error) {
-      throw new ApiError(`HTTP request failed: ${messageOf(error)}`, { httpStatus: result.status, cause: error });
+      throw transportError(method, error, this.config.timeout, result.status);
     }
     const { status, text: raw } = result;
 
@@ -186,21 +206,31 @@ export class ApiClient {
     try {
       data = JSON.parse(raw);
     } catch (error) {
-      throw new ApiError(`Invalid JSON in response (HTTP ${status}): ${raw.slice(0, 500)}`, {
+      throw new ApiError(`${method}: invalid JSON in response (HTTP ${status}): ${quote(raw)}`, {
         httpStatus: status,
         cause: error,
+        method,
+        kind: ErrorKind.INVALID_RESPONSE,
       });
     }
     if (data === null || typeof data !== "object" || Array.isArray(data)) {
-      throw new ApiError(`Unexpected response (HTTP ${status}): ${raw.slice(0, 500)}`, {
+      throw new ApiError(`${method}: unexpected response (HTTP ${status}): ${quote(raw)}`, {
         httpStatus: status,
+        method,
+        kind: ErrorKind.INVALID_RESPONSE,
       });
     }
     if (status >= 400 || data.status === "error") {
-      throw new ApiError(String(data.message ?? "API error"), {
+      const code = codeOf(data.code);
+      const message = data.message === undefined || data.message === null ? null : String(data.message);
+      throw new ApiError(apiMessage(method, message ?? "", status, code), {
         httpStatus: status,
-        errorCode: data.code === undefined || data.code === null ? null : Number(data.code),
+        errorCode: code,
         responseBody: data,
+        method,
+        hint: hintOf(code),
+        kind: ErrorKind.API,
+        apiMessage: message,
       });
     }
     return data;

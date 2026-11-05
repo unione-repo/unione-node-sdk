@@ -68,6 +68,9 @@ export interface BodyObjectJSON {
   "amp"?: string;
 }
 
+/** BodyObject in the API format as an argument: a nested model may also be given as a model. */
+export type BodyObjectInput = BodyObjectJSON;
+
 /** Fields of new BodyObject(): a nested model may be a plain object in the API format. */
 export interface BodyObjectInit {
   /** HTML part of the email body */
@@ -109,6 +112,9 @@ export interface HeadersObjectJSON {
   "X-UNIONE-Template-Engine"?: string;
   [key: string]: string | undefined;
 }
+
+/** HeadersObject in the API format as an argument: a nested model may also be given as a model. */
+export type HeadersObjectInput = HeadersObjectJSON;
 
 /** Fields of new HeadersObject(): a nested model may be a plain object in the API format. */
 export interface HeadersObjectInit {
@@ -170,6 +176,9 @@ export interface AttachmentsArrayItemJSON {
   "content": string;
 }
 
+/** AttachmentsArrayItem in the API format as an argument: a nested model may also be given as a model. */
+export type AttachmentsArrayItemInput = AttachmentsArrayItemJSON;
+
 /** Fields of new AttachmentsArrayItem(): a nested model may be a plain object in the API format. */
 export interface AttachmentsArrayItemInit {
   /**
@@ -220,6 +229,9 @@ export interface InlineAttachmentsArrayItemJSON {
   "content": string;
 }
 
+/** InlineAttachmentsArrayItem in the API format as an argument: a nested model may also be given as a model. */
+export type InlineAttachmentsArrayItemInput = InlineAttachmentsArrayItemJSON;
+
 /** Fields of new InlineAttachmentsArrayItem(): a nested model may be a plain object in the API format. */
 export interface InlineAttachmentsArrayItemInit {
   /**
@@ -267,6 +279,9 @@ export declare class InlineAttachmentsArrayItem {
 export interface SuccessResponseJSON {
   "status"?: string;
 }
+
+/** SuccessResponse in the API format as an argument: a nested model may also be given as a model. */
+export type SuccessResponseInput = SuccessResponseJSON;
 
 /** Fields of new SuccessResponse(): a nested model may be a plain object in the API format. */
 export interface SuccessResponseInit {

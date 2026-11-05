@@ -14,6 +14,9 @@ export interface DomainGetDnsRecordsRequestJSON {
   "domain": string;
 }
 
+/** DomainGetDnsRecordsRequest in the API format as an argument: a nested model may also be given as a model. */
+export type DomainGetDnsRecordsRequestInput = DomainGetDnsRecordsRequestJSON;
+
 /** Fields of new DomainGetDnsRecordsRequest(): a nested model may be a plain object in the API format. */
 export interface DomainGetDnsRecordsRequestInit {
   /** Domain to get DNS records for. */
@@ -39,6 +42,9 @@ export interface DomainGetDnsRecordsResponseJSON {
   "dkim"?: string;
   "dmarc"?: string;
 }
+
+/** DomainGetDnsRecordsResponse in the API format as an argument: a nested model may also be given as a model. */
+export type DomainGetDnsRecordsResponseInput = DomainGetDnsRecordsResponseJSON;
 
 /** Fields of new DomainGetDnsRecordsResponse(): a nested model may be a plain object in the API format. */
 export interface DomainGetDnsRecordsResponseInit {
@@ -90,6 +96,9 @@ export interface DomainValidateVerificationRecordRequestJSON {
   "domain": string;
 }
 
+/** DomainValidateVerificationRecordRequest in the API format as an argument: a nested model may also be given as a model. */
+export type DomainValidateVerificationRecordRequestInput = DomainValidateVerificationRecordRequestJSON;
+
 /** Fields of new DomainValidateVerificationRecordRequest(): a nested model may be a plain object in the API format. */
 export interface DomainValidateVerificationRecordRequestInit {
   /** Domain to validate verification record for. */
@@ -112,6 +121,9 @@ export interface DomainValidateVerificationRecordResponseJSON {
   "status"?: string;
   "message"?: string;
 }
+
+/** DomainValidateVerificationRecordResponse in the API format as an argument: a nested model may also be given as a model. */
+export type DomainValidateVerificationRecordResponseInput = DomainValidateVerificationRecordResponseJSON;
 
 /** Fields of new DomainValidateVerificationRecordResponse(): a nested model may be a plain object in the API format. */
 export interface DomainValidateVerificationRecordResponseInit {
@@ -145,6 +157,9 @@ export interface DomainValidateDkimRequestJSON {
   "domain": string;
 }
 
+/** DomainValidateDkimRequest in the API format as an argument: a nested model may also be given as a model. */
+export type DomainValidateDkimRequestInput = DomainValidateDkimRequestJSON;
+
 /** Fields of new DomainValidateDkimRequest(): a nested model may be a plain object in the API format. */
 export interface DomainValidateDkimRequestInit {
   /** Domain to validate DKIM record for. */
@@ -167,6 +182,9 @@ export interface DomainValidateDkimResponseJSON {
   "status"?: string;
   "message"?: string;
 }
+
+/** DomainValidateDkimResponse in the API format as an argument: a nested model may also be given as a model. */
+export type DomainValidateDkimResponseInput = DomainValidateDkimResponseJSON;
 
 /** Fields of new DomainValidateDkimResponse(): a nested model may be a plain object in the API format. */
 export interface DomainValidateDkimResponseInit {
@@ -201,6 +219,9 @@ export interface DomainListRequestJSON {
   "limit"?: number;
   "offset"?: number;
 }
+
+/** DomainListRequest in the API format as an argument: a nested model may also be given as a model. */
+export type DomainListRequestInput = DomainListRequestJSON;
 
 /** Fields of new DomainListRequest(): a nested model may be a plain object in the API format. */
 export interface DomainListRequestInit {
@@ -245,6 +266,12 @@ export interface DomainListResponseJSON {
   "domains"?: Array<DomainListResponseDomainsItemJSON>;
 }
 
+/** DomainListResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface DomainListResponseInput {
+  "status"?: string;
+  "domains"?: Array<DomainListResponseDomainsItem | DomainListResponseDomainsItemInput>;
+}
+
 /** Fields of new DomainListResponse(): a nested model may be a plain object in the API format. */
 export interface DomainListResponseInit {
   /**
@@ -253,7 +280,7 @@ export interface DomainListResponseInit {
    */
   status?: string;
   /** Array of objects describing domains. */
-  domains?: Array<DomainListResponseDomainsItem | DomainListResponseDomainsItemJSON>;
+  domains?: Array<DomainListResponseDomainsItem | DomainListResponseDomainsItemInput>;
 }
 
 /** DomainListResponse */
@@ -279,14 +306,21 @@ export interface DomainListResponseDomainsItemJSON {
   "dkim"?: DomainListResponseDomainsItemDkimJSON;
 }
 
+/** DomainListResponseDomainsItem in the API format as an argument: a nested model may also be given as a model. */
+export interface DomainListResponseDomainsItemInput {
+  "domain"?: string;
+  "verification-record"?: DomainListResponseDomainsItemVerificationRecord | DomainListResponseDomainsItemVerificationRecordInput;
+  "dkim"?: DomainListResponseDomainsItemDkim | DomainListResponseDomainsItemDkimInput;
+}
+
 /** Fields of new DomainListResponseDomainsItem(): a nested model may be a plain object in the API format. */
 export interface DomainListResponseDomainsItemInit {
   /** Domain name. */
   domain?: string;
   /** Object describing verification record value and status. */
-  verificationRecord?: DomainListResponseDomainsItemVerificationRecord | DomainListResponseDomainsItemVerificationRecordJSON;
+  verificationRecord?: DomainListResponseDomainsItemVerificationRecord | DomainListResponseDomainsItemVerificationRecordInput;
   /** Object describing DKIM record value and status. */
-  dkim?: DomainListResponseDomainsItemDkim | DomainListResponseDomainsItemDkimJSON;
+  dkim?: DomainListResponseDomainsItemDkim | DomainListResponseDomainsItemDkimInput;
 }
 
 /** DomainListResponseDomainsItem */
@@ -309,6 +343,9 @@ export interface DomainListResponseDomainsItemVerificationRecordJSON {
   "value"?: string;
   "status"?: VerificationRecordStatus;
 }
+
+/** DomainListResponseDomainsItemVerificationRecord in the API format as an argument: a nested model may also be given as a model. */
+export type DomainListResponseDomainsItemVerificationRecordInput = DomainListResponseDomainsItemVerificationRecordJSON;
 
 /** Fields of new DomainListResponseDomainsItemVerificationRecord(): a nested model may be a plain object in the API format. */
 export interface DomainListResponseDomainsItemVerificationRecordInit {
@@ -336,6 +373,9 @@ export interface DomainListResponseDomainsItemDkimJSON {
   "key"?: string;
   "status"?: DkimStatus;
 }
+
+/** DomainListResponseDomainsItemDkim in the API format as an argument: a nested model may also be given as a model. */
+export type DomainListResponseDomainsItemDkimInput = DomainListResponseDomainsItemDkimJSON;
 
 /** Fields of new DomainListResponseDomainsItemDkim(): a nested model may be a plain object in the API format. */
 export interface DomainListResponseDomainsItemDkimInit {
@@ -372,6 +412,9 @@ export interface DomainGetSandboxDomainResponseJSON {
   "domain"?: string;
 }
 
+/** DomainGetSandboxDomainResponse in the API format as an argument: a nested model may also be given as a model. */
+export type DomainGetSandboxDomainResponseInput = DomainGetSandboxDomainResponseJSON;
+
 /** Fields of new DomainGetSandboxDomainResponse(): a nested model may be a plain object in the API format. */
 export interface DomainGetSandboxDomainResponseInit {
   /**
@@ -404,6 +447,9 @@ export interface DomainDeleteRequestJSON {
   "domain": string;
 }
 
+/** DomainDeleteRequest in the API format as an argument: a nested model may also be given as a model. */
+export type DomainDeleteRequestInput = DomainDeleteRequestJSON;
+
 /** Fields of new DomainDeleteRequest(): a nested model may be a plain object in the API format. */
 export interface DomainDeleteRequestInit {
   /** Domain name to delete. */
@@ -426,6 +472,9 @@ export interface DomainDeleteResponseJSON {
   "status"?: string;
   "message"?: string;
 }
+
+/** DomainDeleteResponse in the API format as an argument: a nested model may also be given as a model. */
+export type DomainDeleteResponseInput = DomainDeleteResponseJSON;
 
 /** Fields of new DomainDeleteResponse(): a nested model may be a plain object in the API format. */
 export interface DomainDeleteResponseInit {

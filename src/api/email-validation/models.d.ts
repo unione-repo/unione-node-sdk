@@ -5,6 +5,9 @@ export interface EmailValidationSingleRequestJSON {
   "email": string;
 }
 
+/** EmailValidationSingleRequest in the API format as an argument: a nested model may also be given as a model. */
+export type EmailValidationSingleRequestInput = EmailValidationSingleRequestJSON;
+
 /** Fields of new EmailValidationSingleRequest(): a nested model may be a plain object in the API format. */
 export interface EmailValidationSingleRequestInit {
   /** Email address to be checked. */
@@ -36,6 +39,9 @@ export interface EmailValidationSingleResponseJSON {
   "did_you_mean"?: string;
   "processed_at"?: string;
 }
+
+/** EmailValidationSingleResponse in the API format as an argument: a nested model may also be given as a model. */
+export type EmailValidationSingleResponseInput = EmailValidationSingleResponseJSON;
 
 /** Fields of new EmailValidationSingleResponse(): a nested model may be a plain object in the API format. */
 export interface EmailValidationSingleResponseInit {

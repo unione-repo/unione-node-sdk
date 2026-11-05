@@ -1,5 +1,5 @@
 // Types of the models of the Template section.
-import type { AttachmentsArrayItem, AttachmentsArrayItemJSON, BodyObject, BodyObjectJSON, HeadersObject, HeadersObjectJSON, InlineAttachmentsArrayItem, InlineAttachmentsArrayItemJSON, TemplateEngine } from "../../common/models.js";
+import type { AttachmentsArrayItem, AttachmentsArrayItemInput, AttachmentsArrayItemJSON, BodyObject, BodyObjectInput, BodyObjectJSON, HeadersObject, HeadersObjectInput, HeadersObjectJSON, InlineAttachmentsArrayItem, InlineAttachmentsArrayItemInput, InlineAttachmentsArrayItemJSON, TemplateEngine } from "../../common/models.js";
 
 /**
  * Editor type, "html" or "visual". Default is "html". You can create a template with "visual" editor
@@ -20,10 +20,15 @@ export interface TemplateSetRequestJSON {
   "template": TemplateObjectJSON;
 }
 
+/** TemplateSetRequest in the API format as an argument: a nested model may also be given as a model. */
+export interface TemplateSetRequestInput {
+  "template": TemplateObject | TemplateObjectInput;
+}
+
 /** Fields of new TemplateSetRequest(): a nested model may be a plain object in the API format. */
 export interface TemplateSetRequestInit {
   /** Object with all the template properties. */
-  template: TemplateObject | TemplateObjectJSON;
+  template: TemplateObject | TemplateObjectInput;
 }
 
 /** Object with all the properties of the template. */
@@ -56,6 +61,27 @@ export interface TemplateObjectJSON {
   "headers"?: HeadersObjectJSON;
   "attachments"?: Array<AttachmentsArrayItemJSON>;
   "inline_attachments"?: Array<InlineAttachmentsArrayItemJSON>;
+}
+
+/** TemplateObject in the API format as an argument: a nested model may also be given as a model. */
+export interface TemplateObjectInput {
+  "id"?: string;
+  "name": string;
+  "editor_type"?: EditorType;
+  "template_engine"?: TemplateEngine;
+  "global_substitutions"?: Record<string, string>;
+  "global_metadata"?: Record<string, string>;
+  "body"?: BodyObject | BodyObjectInput;
+  "subject"?: string;
+  "from_email": string;
+  "from_name"?: string;
+  "reply_to"?: string;
+  "reply_to_name"?: string;
+  "track_links"?: number;
+  "track_read"?: number;
+  "headers"?: HeadersObject | HeadersObjectInput;
+  "attachments"?: Array<AttachmentsArrayItem | AttachmentsArrayItemInput>;
+  "inline_attachments"?: Array<InlineAttachmentsArrayItem | InlineAttachmentsArrayItemInput>;
 }
 
 /** Fields of new TemplateObject(): a nested model may be a plain object in the API format. */
@@ -102,7 +128,7 @@ export interface TemplateObjectInit {
    */
   globalMetadata?: Record<string, string>;
   /** Contains HTML/plaintext/AMP parts of the email. Either html or plaintext part is required. */
-  body?: BodyObject | BodyObjectJSON;
+  body?: BodyObject | BodyObjectInput;
   /** Email subject. */
   subject?: string;
   /** Sender's email. */
@@ -137,14 +163,14 @@ export interface TemplateObjectInit {
    * List-Unsubscribe, List-Subscribe, List-Help, List-Owner, List-Archive, In-Reply-To and References
    * headers.
    */
-  headers?: HeadersObject | HeadersObjectJSON;
+  headers?: HeadersObject | HeadersObjectInput;
   /** Optional array of attachments */
-  attachments?: Array<AttachmentsArrayItem | AttachmentsArrayItemJSON>;
+  attachments?: Array<AttachmentsArrayItem | AttachmentsArrayItemInput>;
   /**
    * Optional array of inline attachments, e.g. for including images in email instead of loading them
    * from external URL.
    */
-  inlineAttachments?: Array<InlineAttachmentsArrayItem | InlineAttachmentsArrayItemJSON>;
+  inlineAttachments?: Array<InlineAttachmentsArrayItem | InlineAttachmentsArrayItemInput>;
 }
 
 /** Object with all the template properties. */
@@ -247,6 +273,12 @@ export interface TemplateSetResponseJSON {
   "template"?: TemplateObjectJSON;
 }
 
+/** TemplateSetResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface TemplateSetResponseInput {
+  "status"?: string;
+  "template"?: TemplateObject | TemplateObjectInput;
+}
+
 /** Fields of new TemplateSetResponse(): a nested model may be a plain object in the API format. */
 export interface TemplateSetResponseInit {
   /**
@@ -255,7 +287,7 @@ export interface TemplateSetResponseInit {
    */
   status?: string;
   /** Object with all the template properties. */
-  template?: TemplateObject | TemplateObjectJSON;
+  template?: TemplateObject | TemplateObjectInput;
 }
 
 /** TemplateSetResponse */
@@ -278,6 +310,9 @@ export declare class TemplateSetResponse {
 export interface TemplateGetRequestJSON {
   "id": string;
 }
+
+/** TemplateGetRequest in the API format as an argument: a nested model may also be given as a model. */
+export type TemplateGetRequestInput = TemplateGetRequestJSON;
 
 /** Fields of new TemplateGetRequest(): a nested model may be a plain object in the API format. */
 export interface TemplateGetRequestInit {
@@ -302,6 +337,12 @@ export interface TemplateGetResponseJSON {
   "template"?: TemplateObjectJSON;
 }
 
+/** TemplateGetResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface TemplateGetResponseInput {
+  "status"?: string;
+  "template"?: TemplateObject | TemplateObjectInput;
+}
+
 /** Fields of new TemplateGetResponse(): a nested model may be a plain object in the API format. */
 export interface TemplateGetResponseInit {
   /**
@@ -310,7 +351,7 @@ export interface TemplateGetResponseInit {
    */
   status?: string;
   /** Object with all the template properties. */
-  template?: TemplateObject | TemplateObjectJSON;
+  template?: TemplateObject | TemplateObjectInput;
 }
 
 /** TemplateGetResponse */
@@ -334,6 +375,9 @@ export interface TemplateListRequestJSON {
   "limit"?: number;
   "offset"?: number;
 }
+
+/** TemplateListRequest in the API format as an argument: a nested model may also be given as a model. */
+export type TemplateListRequestInput = TemplateListRequestJSON;
 
 /** Fields of new TemplateListRequest(): a nested model may be a plain object in the API format. */
 export interface TemplateListRequestInit {
@@ -374,6 +418,12 @@ export interface TemplateListResponseJSON {
   "templates"?: Array<TemplateListObjectJSON>;
 }
 
+/** TemplateListResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface TemplateListResponseInput {
+  "status"?: string;
+  "templates"?: Array<TemplateListObject | TemplateListObjectInput>;
+}
+
 /** Fields of new TemplateListResponse(): a nested model may be a plain object in the API format. */
 export interface TemplateListResponseInit {
   /**
@@ -382,7 +432,7 @@ export interface TemplateListResponseInit {
    */
   status?: string;
   /** Array of template objects. */
-  templates?: Array<TemplateListObject | TemplateListObjectJSON>;
+  templates?: Array<TemplateListObject | TemplateListObjectInput>;
 }
 
 /** TemplateListResponse */
@@ -420,6 +470,31 @@ export interface TemplateListObjectJSON {
   "headers"?: HeadersObjectJSON;
   "attachments"?: Array<AttachmentsArrayItemJSON>;
   "inline_attachments"?: Array<InlineAttachmentsArrayItemJSON>;
+  "created"?: string;
+  "user_id"?: number;
+  "project_id"?: string;
+  "project_name"?: string;
+}
+
+/** TemplateListObject in the API format as an argument: a nested model may also be given as a model. */
+export interface TemplateListObjectInput {
+  "id"?: string;
+  "name"?: string;
+  "editor_type"?: EditorType;
+  "template_engine"?: TemplateEngine;
+  "global_substitutions"?: Record<string, string>;
+  "global_metadata"?: Record<string, string>;
+  "body"?: BodyObject | BodyObjectInput;
+  "subject"?: string;
+  "from_email"?: string;
+  "from_name"?: string;
+  "reply_to"?: string;
+  "reply_to_name"?: string;
+  "track_links"?: number;
+  "track_read"?: number;
+  "headers"?: HeadersObject | HeadersObjectInput;
+  "attachments"?: Array<AttachmentsArrayItem | AttachmentsArrayItemInput>;
+  "inline_attachments"?: Array<InlineAttachmentsArrayItem | InlineAttachmentsArrayItemInput>;
   "created"?: string;
   "user_id"?: number;
   "project_id"?: string;
@@ -467,7 +542,7 @@ export interface TemplateListObjectInit {
    */
   globalMetadata?: Record<string, string>;
   /** Contains HTML/plaintext/AMP parts of the email. Either html or plaintext part is required. */
-  body?: BodyObject | BodyObjectJSON;
+  body?: BodyObject | BodyObjectInput;
   /** Email subject. */
   subject?: string;
   /** Sender's email. */
@@ -502,14 +577,14 @@ export interface TemplateListObjectInit {
    * List-Unsubscribe, List-Subscribe, List-Help, List-Owner, List-Archive, In-Reply-To and References
    * headers.
    */
-  headers?: HeadersObject | HeadersObjectJSON;
+  headers?: HeadersObject | HeadersObjectInput;
   /** Optional array of attachments */
-  attachments?: Array<AttachmentsArrayItem | AttachmentsArrayItemJSON>;
+  attachments?: Array<AttachmentsArrayItem | AttachmentsArrayItemInput>;
   /**
    * Optional array of inline attachments, e.g. for including images in email instead of loading them
    * from external URL.
    */
-  inlineAttachments?: Array<InlineAttachmentsArrayItem | InlineAttachmentsArrayItemJSON>;
+  inlineAttachments?: Array<InlineAttachmentsArrayItem | InlineAttachmentsArrayItemInput>;
   /** Template creation date and time in UTC timezone in format "YYYY-MM-DD hh:mm:ss" */
   created?: string;
   /** Unique user identifier. */
@@ -623,6 +698,9 @@ export declare class TemplateListObject {
 export interface TemplateDeleteRequestJSON {
   "id": string;
 }
+
+/** TemplateDeleteRequest in the API format as an argument: a nested model may also be given as a model. */
+export type TemplateDeleteRequestInput = TemplateDeleteRequestJSON;
 
 /** Fields of new TemplateDeleteRequest(): a nested model may be a plain object in the API format. */
 export interface TemplateDeleteRequestInit {

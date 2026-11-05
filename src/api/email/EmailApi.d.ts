@@ -1,7 +1,7 @@
 // EmailApi: API methods of the Email section.
 import type { ApiClient } from "../../client/ApiClient.js";
 import type { SuccessResponse } from "../../common/models.js";
-import type { EmailSendRequest, EmailSendRequestJSON, EmailSendResponse, EmailSubscribeRequest, EmailSubscribeRequestJSON } from "./models.js";
+import type { EmailSendRequest, EmailSendRequestInput, EmailSendResponse, EmailSubscribeRequest, EmailSubscribeRequestInput } from "./models.js";
 
 /** This group of methods is related with email sending. */
 export declare class EmailApi {
@@ -27,7 +27,7 @@ export declare class EmailApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#email-send
    * @throws {ApiError}
    */
-  send(request: EmailSendRequest | EmailSendRequestJSON): Promise<EmailSendResponse>;
+  send(request: EmailSendRequest | EmailSendRequestInput): Promise<EmailSendResponse>;
 
   /**
    * Sends an email with (re)subscribe link.
@@ -41,5 +41,5 @@ export declare class EmailApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#email-subscribe
    * @throws {ApiError}
    */
-  subscribe(request: EmailSubscribeRequest | EmailSubscribeRequestJSON): Promise<SuccessResponse>;
+  subscribe(request: EmailSubscribeRequest | EmailSubscribeRequestInput): Promise<SuccessResponse>;
 }

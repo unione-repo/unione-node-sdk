@@ -1,6 +1,6 @@
 // EmailValidationApi: API methods of the EmailValidation section.
 import type { ApiClient } from "../../client/ApiClient.js";
-import type { EmailValidationSingleRequest, EmailValidationSingleRequestJSON, EmailValidationSingleResponse } from "./models.js";
+import type { EmailValidationSingleRequest, EmailValidationSingleRequestInput, EmailValidationSingleResponse } from "./models.js";
 
 /**
  * Email validation methods. As a result of the check, you’ll get detailed information on email
@@ -22,5 +22,5 @@ export declare class EmailValidationApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#email-validation-single
    * @throws {ApiError}
    */
-  single(request: EmailValidationSingleRequest | EmailValidationSingleRequestJSON): Promise<EmailValidationSingleResponse>;
+  single(request: EmailValidationSingleRequest | EmailValidationSingleRequestInput): Promise<EmailValidationSingleResponse>;
 }

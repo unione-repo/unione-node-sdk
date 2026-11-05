@@ -6,6 +6,12 @@ export interface TagListResponseJSON {
   "tags"?: Array<TagsResponseObjectJSON>;
 }
 
+/** TagListResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface TagListResponseInput {
+  "status"?: string;
+  "tags"?: Array<TagsResponseObject | TagsResponseObjectInput>;
+}
+
 /** Fields of new TagListResponse(): a nested model may be a plain object in the API format. */
 export interface TagListResponseInit {
   /**
@@ -14,7 +20,7 @@ export interface TagListResponseInit {
    */
   status?: string;
   /** An array of objects containing data for user-defined tags. */
-  tags?: Array<TagsResponseObject | TagsResponseObjectJSON>;
+  tags?: Array<TagsResponseObject | TagsResponseObjectInput>;
 }
 
 /** TagListResponse */
@@ -38,6 +44,9 @@ export interface TagsResponseObjectJSON {
   "tag_id"?: number;
   "tag"?: string;
 }
+
+/** TagsResponseObject in the API format as an argument: a nested model may also be given as a model. */
+export type TagsResponseObjectInput = TagsResponseObjectJSON;
 
 /** Fields of new TagsResponseObject(): a nested model may be a plain object in the API format. */
 export interface TagsResponseObjectInit {
@@ -64,6 +73,9 @@ export declare class TagsResponseObject {
 export interface TagDeleteRequestJSON {
   "tag_id": number;
 }
+
+/** TagDeleteRequest in the API format as an argument: a nested model may also be given as a model. */
+export type TagDeleteRequestInput = TagDeleteRequestJSON;
 
 /** Fields of new TagDeleteRequest(): a nested model may be a plain object in the API format. */
 export interface TagDeleteRequestInit {

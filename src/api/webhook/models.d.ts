@@ -120,6 +120,17 @@ export interface WebhookSetRequestJSON {
   "events"?: WebhookEventsObjectJSON;
 }
 
+/** WebhookSetRequest in the API format as an argument: a nested model may also be given as a model. */
+export interface WebhookSetRequestInput {
+  "url": string;
+  "status"?: WebhookStatus;
+  "event_format"?: WebhookEventFormat;
+  "delivery_info"?: number;
+  "single_event"?: number;
+  "max_parallel"?: number;
+  "events"?: WebhookEventsObject | WebhookEventsObjectInput;
+}
+
 /** Fields of new WebhookSetRequest(): a nested model may be a plain object in the API format. */
 export interface WebhookSetRequestInit {
   /**
@@ -166,7 +177,7 @@ export interface WebhookSetRequestInit {
    */
   maxParallel?: number;
   /** Object containing events to notify of. */
-  events?: WebhookEventsObject | WebhookEventsObjectJSON;
+  events?: WebhookEventsObject | WebhookEventsObjectInput;
 }
 
 /** WebhookSetRequest */
@@ -229,6 +240,9 @@ export interface WebhookEventsObjectJSON {
   "email_status"?: Array<EmailStatus>;
 }
 
+/** WebhookEventsObject in the API format as an argument: a nested model may also be given as a model. */
+export type WebhookEventsObjectInput = WebhookEventsObjectJSON;
+
 /** Fields of new WebhookEventsObject(): a nested model may be a plain object in the API format. */
 export interface WebhookEventsObjectInit {
   /**
@@ -268,6 +282,12 @@ export interface WebhookSetResponseJSON {
   "object"?: WebhookObjectJSON;
 }
 
+/** WebhookSetResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface WebhookSetResponseInput {
+  "status"?: string;
+  "object"?: WebhookObject | WebhookObjectInput;
+}
+
 /** Fields of new WebhookSetResponse(): a nested model may be a plain object in the API format. */
 export interface WebhookSetResponseInit {
   /**
@@ -276,7 +296,7 @@ export interface WebhookSetResponseInit {
    */
   status?: string;
   /** Object with all the webhook properties. */
-  object?: WebhookObject | WebhookObjectJSON;
+  object?: WebhookObject | WebhookObjectInput;
 }
 
 /** WebhookSetResponse */
@@ -306,6 +326,19 @@ export interface WebhookObjectJSON {
   "max_parallel"?: number;
   "updated_at"?: string;
   "events"?: WebhookEventsObjectJSON;
+}
+
+/** WebhookObject in the API format as an argument: a nested model may also be given as a model. */
+export interface WebhookObjectInput {
+  "id"?: number;
+  "url"?: string;
+  "status"?: WebhookStatus;
+  "event_format"?: WebhookEventFormat;
+  "delivery_info"?: number;
+  "single_event"?: number;
+  "max_parallel"?: number;
+  "updated_at"?: string;
+  "events"?: WebhookEventsObject | WebhookEventsObjectInput;
 }
 
 /** Fields of new WebhookObject(): a nested model may be a plain object in the API format. */
@@ -354,7 +387,7 @@ export interface WebhookObjectInit {
   /** Webhook properties last update date and time in UTC timezone in "YYYY-MM-DD hh:mm:ss" format. */
   updatedAt?: string;
   /** Object containing events to notify of. */
-  events?: WebhookEventsObject | WebhookEventsObjectJSON;
+  events?: WebhookEventsObject | WebhookEventsObjectInput;
 }
 
 /** Object with all the webhook properties. */
@@ -417,6 +450,12 @@ export interface WebhookCallbackJSON {
   "events_by_user"?: Array<WebhookCallbackEventsByUserItemJSON>;
 }
 
+/** WebhookCallback in the API format as an argument: a nested model may also be given as a model. */
+export interface WebhookCallbackInput {
+  "auth"?: string;
+  "events_by_user"?: Array<WebhookCallbackEventsByUserItem | WebhookCallbackEventsByUserItemInput>;
+}
+
 /** Fields of new WebhookCallback(): a nested model may be a plain object in the API format. */
 export interface WebhookCallbackInit {
   /**
@@ -426,7 +465,7 @@ export interface WebhookCallbackInit {
    */
   auth?: string;
   /** Array with only one element, containing events of a user/project. */
-  eventsByUser?: Array<WebhookCallbackEventsByUserItem | WebhookCallbackEventsByUserItemJSON>;
+  eventsByUser?: Array<WebhookCallbackEventsByUserItem | WebhookCallbackEventsByUserItemInput>;
 }
 
 /** Webhook callback format description. */
@@ -454,6 +493,14 @@ export interface WebhookCallbackEventsByUserItemJSON {
   "events"?: Array<WebhookCallbackEventsByUserItemEventsItemJSON>;
 }
 
+/** WebhookCallbackEventsByUserItem in the API format as an argument: a nested model may also be given as a model. */
+export interface WebhookCallbackEventsByUserItemInput {
+  "user_id"?: number;
+  "project_id"?: string;
+  "project_name"?: string;
+  "events"?: Array<WebhookCallbackEventsByUserItemEventsItem | WebhookCallbackEventsByUserItemEventsItemInput>;
+}
+
 /** Fields of new WebhookCallbackEventsByUserItem(): a nested model may be a plain object in the API format. */
 export interface WebhookCallbackEventsByUserItemInit {
   /** Unique user identifier. */
@@ -463,7 +510,7 @@ export interface WebhookCallbackEventsByUserItemInit {
   /** Project name, present only if webhook was registered for the project using project API key. */
   projectName?: string;
   /** Array of events reported by webhook. */
-  events?: Array<WebhookCallbackEventsByUserItemEventsItem | WebhookCallbackEventsByUserItemEventsItemJSON>;
+  events?: Array<WebhookCallbackEventsByUserItemEventsItem | WebhookCallbackEventsByUserItemEventsItemInput>;
 }
 
 /** WebhookCallbackEventsByUserItem */
@@ -489,6 +536,12 @@ export interface WebhookCallbackEventsByUserItemEventsItemJSON {
   "event_data"?: WebhookCallbackEventsByUserItemEventsItemEventDataJSON;
 }
 
+/** WebhookCallbackEventsByUserItemEventsItem in the API format as an argument: a nested model may also be given as a model. */
+export interface WebhookCallbackEventsByUserItemEventsItemInput {
+  "event_name"?: EventName;
+  "event_data"?: WebhookCallbackEventsByUserItemEventsItemEventData | WebhookCallbackEventsByUserItemEventsItemEventDataInput;
+}
+
 /** Fields of new WebhookCallbackEventsByUserItemEventsItem(): a nested model may be a plain object in the API format. */
 export interface WebhookCallbackEventsByUserItemEventsItemInit {
   /**
@@ -500,7 +553,7 @@ export interface WebhookCallbackEventsByUserItemEventsItemInit {
    * Object with different event properties depending on "event_name". Below you can see all the
    * properties, "transactional_email_status"-related first and then "transactional_spam_block"-related.
    */
-  eventData?: WebhookCallbackEventsByUserItemEventsItemEventData | WebhookCallbackEventsByUserItemEventsItemEventDataJSON;
+  eventData?: WebhookCallbackEventsByUserItemEventsItemEventData | WebhookCallbackEventsByUserItemEventsItemEventDataInput;
 }
 
 /** WebhookCallbackEventsByUserItemEventsItem */
@@ -531,6 +584,22 @@ export interface WebhookCallbackEventsByUserItemEventsItemEventDataJSON {
   "event_time"?: string;
   "url"?: string;
   "delivery_info"?: WebhookCallbackEventsByUserItemEventsItemEventDataDeliveryInfoJSON;
+  "block_time"?: string;
+  "block_type"?: BlockType;
+  "domain"?: string;
+  "SMTP_blocks_count"?: number;
+  "domain_status"?: DomainStatus;
+}
+
+/** WebhookCallbackEventsByUserItemEventsItemEventData in the API format as an argument: a nested model may also be given as a model. */
+export interface WebhookCallbackEventsByUserItemEventsItemEventDataInput {
+  "job_id"?: string;
+  "metadata"?: Record<string, string>;
+  "email"?: string;
+  "status"?: EmailStatus;
+  "event_time"?: string;
+  "url"?: string;
+  "delivery_info"?: WebhookCallbackEventsByUserItemEventsItemEventDataDeliveryInfo | WebhookCallbackEventsByUserItemEventsItemEventDataDeliveryInfoInput;
   "block_time"?: string;
   "block_type"?: BlockType;
   "domain"?: string;
@@ -597,7 +666,7 @@ export interface WebhookCallbackEventsByUserItemEventsItemEventDataInit {
    * format. This property exists only if webhook has delivery_info proeprty set to 1 and
    * event_name="transactional_email_status".
    */
-  deliveryInfo?: WebhookCallbackEventsByUserItemEventsItemEventDataDeliveryInfo | WebhookCallbackEventsByUserItemEventsItemEventDataDeliveryInfoJSON;
+  deliveryInfo?: WebhookCallbackEventsByUserItemEventsItemEventDataDeliveryInfo | WebhookCallbackEventsByUserItemEventsItemEventDataDeliveryInfoInput;
   /**
    * Spam block date & time in UTC time zone in "YYYY-MM-DD hh:mm:ss" format. This property exists only
    * if event_name="transactional_spam_block".
@@ -727,6 +796,9 @@ export interface WebhookCallbackEventsByUserItemEventsItemEventDataDeliveryInfoJ
   "city"?: string;
   "sender_ip"?: string;
 }
+
+/** WebhookCallbackEventsByUserItemEventsItemEventDataDeliveryInfo in the API format as an argument: a nested model may also be given as a model. */
+export type WebhookCallbackEventsByUserItemEventsItemEventDataDeliveryInfoInput = WebhookCallbackEventsByUserItemEventsItemEventDataDeliveryInfoJSON;
 
 /** Fields of new WebhookCallbackEventsByUserItemEventsItemEventDataDeliveryInfo(): a nested model may be a plain object in the API format. */
 export interface WebhookCallbackEventsByUserItemEventsItemEventDataDeliveryInfoInit {
@@ -930,6 +1002,9 @@ export interface WebhookGetRequestJSON {
   "url": string;
 }
 
+/** WebhookGetRequest in the API format as an argument: a nested model may also be given as a model. */
+export type WebhookGetRequestInput = WebhookGetRequestJSON;
+
 /** Fields of new WebhookGetRequest(): a nested model may be a plain object in the API format. */
 export interface WebhookGetRequestInit {
   /** Webhook URL. */
@@ -953,6 +1028,12 @@ export interface WebhookGetResponseJSON {
   "object"?: WebhookObjectJSON;
 }
 
+/** WebhookGetResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface WebhookGetResponseInput {
+  "status"?: string;
+  "object"?: WebhookObject | WebhookObjectInput;
+}
+
 /** Fields of new WebhookGetResponse(): a nested model may be a plain object in the API format. */
 export interface WebhookGetResponseInit {
   /**
@@ -961,7 +1042,7 @@ export interface WebhookGetResponseInit {
    */
   status?: string;
   /** Object with all the webhook properties. */
-  object?: WebhookObject | WebhookObjectJSON;
+  object?: WebhookObject | WebhookObjectInput;
 }
 
 /** WebhookGetResponse */
@@ -985,6 +1066,9 @@ export interface WebhookListRequestJSON {
   "limit"?: number;
   "offset"?: number;
 }
+
+/** WebhookListRequest in the API format as an argument: a nested model may also be given as a model. */
+export type WebhookListRequestInput = WebhookListRequestJSON;
 
 /** Fields of new WebhookListRequest(): a nested model may be a plain object in the API format. */
 export interface WebhookListRequestInit {
@@ -1019,6 +1103,12 @@ export interface WebhookListResponseJSON {
   "objects"?: Array<WebhookObjectJSON>;
 }
 
+/** WebhookListResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface WebhookListResponseInput {
+  "status"?: string;
+  "objects"?: Array<WebhookObject | WebhookObjectInput>;
+}
+
 /** Fields of new WebhookListResponse(): a nested model may be a plain object in the API format. */
 export interface WebhookListResponseInit {
   /**
@@ -1027,7 +1117,7 @@ export interface WebhookListResponseInit {
    */
   status?: string;
   /** Array of webhooks objects. */
-  objects?: Array<WebhookObject | WebhookObjectJSON>;
+  objects?: Array<WebhookObject | WebhookObjectInput>;
 }
 
 /** WebhookListResponse */
@@ -1050,6 +1140,9 @@ export declare class WebhookListResponse {
 export interface WebhookDeleteRequestJSON {
   "url": string;
 }
+
+/** WebhookDeleteRequest in the API format as an argument: a nested model may also be given as a model. */
+export type WebhookDeleteRequestInput = WebhookDeleteRequestJSON;
 
 /** Fields of new WebhookDeleteRequest(): a nested model may be a plain object in the API format. */
 export interface WebhookDeleteRequestInit {

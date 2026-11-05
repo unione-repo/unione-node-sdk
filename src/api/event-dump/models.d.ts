@@ -14,6 +14,19 @@ export interface EventDumpCreateRequestJSON {
   "format"?: string;
 }
 
+/** EventDumpCreateRequest in the API format as an argument: a nested model may also be given as a model. */
+export interface EventDumpCreateRequestInput {
+  "start_time": string;
+  "end_time"?: string;
+  "limit"?: number;
+  "all_projects"?: boolean;
+  "filter"?: FilterObject | FilterObjectInput;
+  "dump_fields"?: Array<string>;
+  "aggregate"?: string;
+  "delimiter"?: string;
+  "format"?: string;
+}
+
 /** Fields of new EventDumpCreateRequest(): a nested model may be a plain object in the API format. */
 export interface EventDumpCreateRequestInit {
   /**
@@ -35,7 +48,7 @@ export interface EventDumpCreateRequestInit {
    */
   allProjects?: boolean;
   /** An object with the properties of the event dump filter. */
-  filter?: FilterObject | FilterObjectJSON;
+  filter?: FilterObject | FilterObjectInput;
   /**
    * An array of strings containing the names of columns you need in your report, in your preferred
    * order. If the 'dump_fields' array is missing or empty, a default field list and order will be
@@ -123,6 +136,9 @@ export interface FilterObjectJSON {
   "domain"?: string;
   "campaign_id"?: string;
 }
+
+/** FilterObject in the API format as an argument: a nested model may also be given as a model. */
+export type FilterObjectInput = FilterObjectJSON;
 
 /** Fields of new FilterObject(): a nested model may be a plain object in the API format. */
 export interface FilterObjectInit {
@@ -285,6 +301,9 @@ export interface EventDumpCreateResponseJSON {
   "dump_id"?: string;
 }
 
+/** EventDumpCreateResponse in the API format as an argument: a nested model may also be given as a model. */
+export type EventDumpCreateResponseInput = EventDumpCreateResponseJSON;
+
 /** Fields of new EventDumpCreateResponse(): a nested model may be a plain object in the API format. */
 export interface EventDumpCreateResponseInit {
   /**
@@ -323,6 +342,9 @@ export interface EventDumpGetRequestJSON {
   "dump_id": string;
 }
 
+/** EventDumpGetRequest in the API format as an argument: a nested model may also be given as a model. */
+export type EventDumpGetRequestInput = EventDumpGetRequestJSON;
+
 /** Fields of new EventDumpGetRequest(): a nested model may be a plain object in the API format. */
 export interface EventDumpGetRequestInit {
   /**
@@ -352,6 +374,12 @@ export interface EventDumpGetResponseJSON {
   "event_dump"?: EventDumpObjectJSON;
 }
 
+/** EventDumpGetResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface EventDumpGetResponseInput {
+  "status"?: string;
+  "event_dump"?: EventDumpObject | EventDumpObjectInput;
+}
+
 /** Fields of new EventDumpGetResponse(): a nested model may be a plain object in the API format. */
 export interface EventDumpGetResponseInit {
   /**
@@ -360,7 +388,7 @@ export interface EventDumpGetResponseInit {
    */
   status?: string;
   /** An object with the properties of the event dump. */
-  eventDump?: EventDumpObject | EventDumpObjectJSON;
+  eventDump?: EventDumpObject | EventDumpObjectInput;
 }
 
 /** EventDumpGetResponse */
@@ -386,6 +414,13 @@ export interface EventDumpObjectJSON {
   "files"?: Array<EventDumpFilesObjectJSON>;
 }
 
+/** EventDumpObject in the API format as an argument: a nested model may also be given as a model. */
+export interface EventDumpObjectInput {
+  "dump_id"?: string;
+  "dump_status"?: string;
+  "files"?: Array<EventDumpFilesObject | EventDumpFilesObjectInput>;
+}
+
 /** Fields of new EventDumpObject(): a nested model may be a plain object in the API format. */
 export interface EventDumpObjectInit {
   /**
@@ -407,7 +442,7 @@ export interface EventDumpObjectInit {
    * everything listed in “files” even if "dump_status" is still "in_process". If there are no events,
    * according to the specified parameters, an empty array will be returned.
    */
-  files?: Array<EventDumpFilesObject | EventDumpFilesObjectJSON>;
+  files?: Array<EventDumpFilesObject | EventDumpFilesObjectInput>;
 }
 
 /** An object with the properties of the event dump. */
@@ -445,6 +480,9 @@ export interface EventDumpFilesObjectJSON {
   "size"?: number;
 }
 
+/** EventDumpFilesObject in the API format as an argument: a nested model may also be given as a model. */
+export type EventDumpFilesObjectInput = EventDumpFilesObjectJSON;
+
 /** Fields of new EventDumpFilesObject(): a nested model may be a plain object in the API format. */
 export interface EventDumpFilesObjectInit {
   /**
@@ -478,6 +516,12 @@ export interface EventDumpListResponseJSON {
   "event_dumps"?: Array<EventDumpObjectJSON>;
 }
 
+/** EventDumpListResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface EventDumpListResponseInput {
+  "status"?: string;
+  "event_dumps"?: Array<EventDumpObject | EventDumpObjectInput>;
+}
+
 /** Fields of new EventDumpListResponse(): a nested model may be a plain object in the API format. */
 export interface EventDumpListResponseInit {
   /**
@@ -489,7 +533,7 @@ export interface EventDumpListResponseInit {
    * An array of objects describing event dumps. Each object is similar to 'event_dump' object returned
    * by the [event-dump/get](https://docs.unione.io/en/web-api-ref#event-dump-get) method.
    */
-  eventDumps?: Array<EventDumpObject | EventDumpObjectJSON>;
+  eventDumps?: Array<EventDumpObject | EventDumpObjectInput>;
 }
 
 /** EventDumpListResponse */
@@ -515,6 +559,9 @@ export declare class EventDumpListResponse {
 export interface EventDumpDeleteRequestJSON {
   "dump_id": string;
 }
+
+/** EventDumpDeleteRequest in the API format as an argument: a nested model may also be given as a model. */
+export type EventDumpDeleteRequestInput = EventDumpDeleteRequestJSON;
 
 /** Fields of new EventDumpDeleteRequest(): a nested model may be a plain object in the API format. */
 export interface EventDumpDeleteRequestInit {

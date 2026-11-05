@@ -7,6 +7,9 @@ export interface SystemPingResponseJSON {
   "user_id"?: number;
 }
 
+/** SystemPingResponse in the API format as an argument: a nested model may also be given as a model. */
+export type SystemPingResponseInput = SystemPingResponseJSON;
+
 /** Fields of new SystemPingResponse(): a nested model may be a plain object in the API format. */
 export interface SystemPingResponseInit {
   /**
@@ -45,6 +48,17 @@ export interface SystemInfoResponseJSON {
   "accounting"?: SystemInfoResponseAccountingJSON;
 }
 
+/** SystemInfoResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface SystemInfoResponseInput {
+  "status"?: string;
+  "user_id"?: number;
+  "email"?: string;
+  "project_id"?: string;
+  "project_name"?: string;
+  "project_accounting"?: ProjectAccountingObject | ProjectAccountingObjectInput;
+  "accounting"?: SystemInfoResponseAccounting | SystemInfoResponseAccountingInput;
+}
+
 /** Fields of new SystemInfoResponse(): a nested model may be a plain object in the API format. */
 export interface SystemInfoResponseInit {
   /**
@@ -70,12 +84,12 @@ export interface SystemInfoResponseInit {
    * Object with email counter properties. Present only if the API key used for request is the user API
    * key.
    */
-  projectAccounting?: ProjectAccountingObject | ProjectAccountingObjectJSON;
+  projectAccounting?: ProjectAccountingObject | ProjectAccountingObjectInput;
   /**
    * Object with accounting period properties. Present only if the API key used for request is the user
    * API key.
    */
-  accounting?: SystemInfoResponseAccounting | SystemInfoResponseAccountingJSON;
+  accounting?: SystemInfoResponseAccounting | SystemInfoResponseAccountingInput;
 }
 
 /** SystemInfoResponse */
@@ -122,6 +136,9 @@ export interface ProjectAccountingObjectJSON {
   "email_counter_limit"?: number;
   "email_counter_mode"?: EmailCounterMode;
 }
+
+/** ProjectAccountingObject in the API format as an argument: a nested model may also be given as a model. */
+export type ProjectAccountingObjectInput = ProjectAccountingObjectJSON;
 
 /** Fields of new ProjectAccountingObject(): a nested model may be a plain object in the API format. */
 export interface ProjectAccountingObjectInit {
@@ -172,6 +189,9 @@ export interface SystemInfoResponseAccountingJSON {
   "emails_included"?: number;
   "emails_sent"?: number;
 }
+
+/** SystemInfoResponseAccounting in the API format as an argument: a nested model may also be given as a model. */
+export type SystemInfoResponseAccountingInput = SystemInfoResponseAccountingJSON;
 
 /** Fields of new SystemInfoResponseAccounting(): a nested model may be a plain object in the API format. */
 export interface SystemInfoResponseAccountingInit {

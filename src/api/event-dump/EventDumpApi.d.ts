@@ -1,7 +1,7 @@
 // EventDumpApi: API methods of the EventDump section.
 import type { ApiClient } from "../../client/ApiClient.js";
 import type { SuccessResponse } from "../../common/models.js";
-import type { EventDumpCreateRequest, EventDumpCreateRequestJSON, EventDumpCreateResponse, EventDumpDeleteRequest, EventDumpDeleteRequestJSON, EventDumpGetRequest, EventDumpGetRequestJSON, EventDumpGetResponse, EventDumpListResponse } from "./models.js";
+import type { EventDumpCreateRequest, EventDumpCreateRequestInput, EventDumpCreateResponse, EventDumpDeleteRequest, EventDumpDeleteRequestInput, EventDumpGetRequest, EventDumpGetRequestInput, EventDumpGetResponse, EventDumpListResponse } from "./models.js";
 
 /**
  * These methods are used to obtain a list of events for a given period of time. The data is stored for
@@ -27,7 +27,7 @@ export declare class EventDumpApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#event-dump-create
    * @throws {ApiError}
    */
-  create(request: EventDumpCreateRequest | EventDumpCreateRequestJSON): Promise<EventDumpCreateResponse>;
+  create(request: EventDumpCreateRequest | EventDumpCreateRequestInput): Promise<EventDumpCreateResponse>;
 
   /**
    * Returns dump properties for a given identifier
@@ -35,7 +35,7 @@ export declare class EventDumpApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#event-dump-get
    * @throws {ApiError}
    */
-  get(request: EventDumpGetRequest | EventDumpGetRequestJSON): Promise<EventDumpGetResponse>;
+  get(request: EventDumpGetRequest | EventDumpGetRequestInput): Promise<EventDumpGetResponse>;
 
   /**
    * This method does not require any parameters; returns the full list of existing dumps.
@@ -51,5 +51,5 @@ export declare class EventDumpApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#event-dump-delete
    * @throws {ApiError}
    */
-  delete(request: EventDumpDeleteRequest | EventDumpDeleteRequestJSON): Promise<SuccessResponse>;
+  delete(request: EventDumpDeleteRequest | EventDumpDeleteRequestInput): Promise<SuccessResponse>;
 }
