@@ -123,7 +123,7 @@ test("email/send: request and response", async () => {
   const target = new URL(url);
   assert.strictEqual(target.origin + target.pathname, BASE + "/email/send.json");
   assert.strictEqual(target.searchParams.get("platform"), PLATFORM);
-  assert.strictEqual(PLATFORM, "node-sdk.1.3.0");
+  assert.strictEqual(PLATFORM, "node-sdk.1.3.1");
   assert.strictEqual(init.method, "POST");
   assert.strictEqual(init.headers["X-API-KEY"], API_KEY);
   assert.strictEqual(init.headers["Content-Type"], "application/json");
