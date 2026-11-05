@@ -1,6 +1,6 @@
 // ConfirmedEmailApi: API methods of the ConfirmedEmail section.
 import type { ApiClient } from "../../client/ApiClient.js";
-import type { ConfirmedEmailCreateResponse, ConfirmedEmailDeleteResponse, ConfirmedEmailListResponse, ConfirmedEmailRequest, ConfirmedEmailRequestJSON } from "./models.js";
+import type { ConfirmedEmailCreateResponse, ConfirmedEmailDeleteResponse, ConfirmedEmailListResponse, ConfirmedEmailRequest, ConfirmedEmailRequestInput } from "./models.js";
 
 /**
  * Manage email addresses confirmed for sandbox-domain sending. These methods are available only with a
@@ -16,7 +16,7 @@ export declare class ConfirmedEmailApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#confirmed-email-create
    * @throws {ApiError}
    */
-  create(request: ConfirmedEmailRequest | ConfirmedEmailRequestJSON): Promise<ConfirmedEmailCreateResponse>;
+  create(request: ConfirmedEmailRequest | ConfirmedEmailRequestInput): Promise<ConfirmedEmailCreateResponse>;
 
   /**
    * Lists confirmed and unconfirmed email addresses for the account.
@@ -32,5 +32,5 @@ export declare class ConfirmedEmailApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#confirmed-email-delete
    * @throws {ApiError}
    */
-  delete(request: ConfirmedEmailRequest | ConfirmedEmailRequestJSON): Promise<ConfirmedEmailDeleteResponse>;
+  delete(request: ConfirmedEmailRequest | ConfirmedEmailRequestInput): Promise<ConfirmedEmailDeleteResponse>;
 }

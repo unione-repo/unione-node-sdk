@@ -30,7 +30,7 @@ export UNIONE_API_KEY="your-api-key"
 import { UniOneClient } from "unione";
 import { MessageObjectRecipientsItem as Recipient } from "unione/api/email";
 
-const client = new UniOneClient(process.env.UNIONE_API_KEY);
+const client = new UniOneClient(process.env.UNIONE_API_KEY ?? "");
 
 const { jobId } = await client.email.send({
   message: {
@@ -133,7 +133,7 @@ await client.email.send({
 
 ### Retry safely
 
-A repeat with the same `idempotence_key` within a minute is not sent twice: retry network errors, timeouts, 429 and 5xx with it.
+A repeat with the same `idempotence_key` within a minute is not sent twice: retry the retryable errors (network errors, timeouts, 429 and 5xx) with it; after that minute check your own record of the sent email before repeating.
 
 ```javascript
 await client.email.send({
@@ -158,8 +158,9 @@ try {
   await client.email.send(request);
 } catch (e) {
   if (!(e instanceof ApiError)) throw e;
-  // HTTP status (0: network error or timeout), API error code, message
-  console.error(e.httpStatus, e.errorCode, e.message);
+  // the message: method, API error code, HTTP status and how to fix it; kind: what failed; retryable: a repeat may succeed
+  console.error(e.message);
+  console.error(e.kind, e.retryable ? "retryable" : "not retryable");
 }
 ```
 
@@ -312,7 +313,7 @@ const other = new UniOneClient("YOUR_API_KEY", Host.US1, { timeout: 10000 });
 
 ### Error handling
 
-Every method raises `ApiError` when the API returns an error; it carries the [API error code](https://docs.unione.io/en/web-api-ref#api-errors) and the HTTP status.
+Every method raises `ApiError`: an error of the API, a network error or a timeout, a broken response, and a mistake found before sending (an empty API key, a missing or empty `message.recipients` or `email` of a recipient: no request is sent). The message names the method and, for an API error, the [API error code](https://docs.unione.io/en/web-api-ref#api-errors), the HTTP status and how to fix it: `email/send: Unknown recipient (API error 204, HTTP 400). Fix: ...`. The error also tells what failed (its kind: api, network, timeout, invalid_response, invalid_request), whether a repeat may succeed (network, timeout, HTTP 429 and 5xx; not a request you cancelled) and keeps the API's own message text, in full and undecorated, in `apiMessage` (empty without an API response).
 
 ### Custom HTTP client and headers
 
@@ -344,7 +345,7 @@ try {
   console.log(await client.confirmedEmail.list());
 } catch (error) {
   if (!(error instanceof ApiError)) throw error;
-  console.log(error.httpStatus, error.errorCode, error.message, error.cause);
+  console.log(error.message, error.kind, error.retryable, error.cause);
 }
 ```
 
@@ -378,7 +379,7 @@ console.log(JSON.stringify(request));
 
 ### TypeScript
 
-The package has type declarations: the client, the API classes, the models (with their `...JSON` shape in the API format and `...Init` constructor options) and the enums (frozen objects and string literal types).
+The package has type declarations: the client, the API classes, the models (with their `...JSON` shape in the API format, `...Input` - the same as an argument, where a nested model may also be a model, and `...Init` constructor options) and the enums (frozen objects and string literal types).
 
 ```typescript
 import { UniOneClient, type ConfigurationOptions } from "unione";
@@ -418,6 +419,25 @@ const response: EmailSendResponse = await client.email.send(new EmailSendRequest
     idempotenceKey: "SG1VsbG68sIH2dvc5mx890kIQ",
   }),
 }));
+```
+
+### CommonJS
+
+The package is an ES module (`import`). In a CommonJS project (`require`) Node.js 20.19+ / 22.12+ loads it with `require()`:
+
+```javascript
+const { UniOneClient } = require("unione");
+
+const client = new UniOneClient("YOUR_API_KEY");
+```
+
+On an older Node.js `require()` of the package fails with `ERR_REQUIRE_ESM`: load it with `import()`, it is asynchronous. In TypeScript this needs `"module": "node16"` or `"nodenext"` in tsconfig.json: with `"commonjs"` the compiler turns `import()` into `require()`.
+
+```javascript
+async function createClient() {
+  const { UniOneClient } = await import("unione");
+  return new UniOneClient("YOUR_API_KEY");
+}
 ```
 
 ## Help

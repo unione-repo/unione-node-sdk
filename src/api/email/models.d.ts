@@ -1,15 +1,20 @@
 // Types of the models of the Email section.
-import type { AttachmentsArrayItem, AttachmentsArrayItemJSON, BodyObject, BodyObjectJSON, HeadersObject, HeadersObjectJSON, InlineAttachmentsArrayItem, InlineAttachmentsArrayItemJSON, TemplateEngine } from "../../common/models.js";
+import type { AttachmentsArrayItem, AttachmentsArrayItemInput, AttachmentsArrayItemJSON, BodyObject, BodyObjectInput, BodyObjectJSON, HeadersObject, HeadersObjectInput, HeadersObjectJSON, InlineAttachmentsArrayItem, InlineAttachmentsArrayItemInput, InlineAttachmentsArrayItemJSON, TemplateEngine } from "../../common/models.js";
 
 /** EmailSendRequest in the API format: the object sent and received as JSON. */
 export interface EmailSendRequestJSON {
   "message": MessageObjectJSON;
 }
 
+/** EmailSendRequest in the API format as an argument: a nested model may also be given as a model. */
+export interface EmailSendRequestInput {
+  "message": MessageObject | MessageObjectInput;
+}
+
 /** Fields of new EmailSendRequest(): a nested model may be a plain object in the API format. */
 export interface EmailSendRequestInit {
   /** Object containing all message properties. */
-  message: MessageObject | MessageObjectJSON;
+  message: MessageObject | MessageObjectInput;
 }
 
 /** EmailSendRequest */
@@ -52,10 +57,39 @@ export interface MessageObjectJSON {
   "options"?: MessageObjectOptionsJSON;
 }
 
+/** MessageObject in the API format as an argument: a nested model may also be given as a model. */
+export interface MessageObjectInput {
+  "recipients": Array<MessageObjectRecipientsItem | MessageObjectRecipientsItemInput>;
+  "template_id"?: string;
+  "tags"?: Array<string>;
+  "skip_unsubscribe"?: number;
+  "global_language"?: string;
+  "template_engine"?: TemplateEngine;
+  "global_substitutions"?: Record<string, string>;
+  "global_metadata"?: Record<string, string>;
+  "body": BodyObject | BodyObjectInput;
+  "subject": string;
+  "from_email"?: string;
+  "from_name"?: string;
+  "reply_to"?: string;
+  "reply_to_name"?: string;
+  "track_links"?: number;
+  "track_read"?: number;
+  "bypass_global"?: number;
+  "bypass_unavailable"?: number;
+  "bypass_unsubscribed"?: number;
+  "bypass_complained"?: number;
+  "idempotence_key"?: string;
+  "headers"?: HeadersObject | HeadersObjectInput;
+  "attachments"?: Array<AttachmentsArrayItem | AttachmentsArrayItemInput>;
+  "inline_attachments"?: Array<InlineAttachmentsArrayItem | InlineAttachmentsArrayItemInput>;
+  "options"?: MessageObjectOptions | MessageObjectOptionsInput;
+}
+
 /** Fields of new MessageObject(): a nested model may be a plain object in the API format. */
 export interface MessageObjectInit {
   /** Contains recipient emails, substitutions(merge tags) and metadata. */
-  recipients: Array<MessageObjectRecipientsItem | MessageObjectRecipientsItemJSON>;
+  recipients: Array<MessageObjectRecipientsItem | MessageObjectRecipientsItemInput>;
   /**
    * Optional identifier of the template that had been created by
    * [template/set](https://docs.unione.io/en/web-api-ref#template-set) method. If template_id is passed
@@ -113,7 +147,7 @@ export interface MessageObjectInit {
    */
   globalMetadata?: Record<string, string>;
   /** Contains HTML/plaintext/AMP parts of the email. Either html or plaintext part is required. */
-  body: BodyObject | BodyObjectJSON;
+  body: BodyObject | BodyObjectInput;
   /** Email subject. */
   subject: string;
   /** Sender's email. Required only if template_id parameter is empty. */
@@ -185,16 +219,16 @@ export interface MessageObjectInit {
    * List-Unsubscribe, List-Subscribe, List-Help, List-Owner, List-Archive, In-Reply-To and References
    * headers.
    */
-  headers?: HeadersObject | HeadersObjectJSON;
+  headers?: HeadersObject | HeadersObjectInput;
   /** Optional array of attachments */
-  attachments?: Array<AttachmentsArrayItem | AttachmentsArrayItemJSON>;
+  attachments?: Array<AttachmentsArrayItem | AttachmentsArrayItemInput>;
   /**
    * Optional array of inline attachments, e.g. for including images in email instead of loading them
    * from external URL.
    */
-  inlineAttachments?: Array<InlineAttachmentsArrayItem | InlineAttachmentsArrayItemJSON>;
+  inlineAttachments?: Array<InlineAttachmentsArrayItem | InlineAttachmentsArrayItemInput>;
   /** Additional message options. */
-  options?: MessageObjectOptions | MessageObjectOptionsJSON;
+  options?: MessageObjectOptions | MessageObjectOptionsInput;
 }
 
 /** Object containing all message properties. */
@@ -354,6 +388,9 @@ export interface MessageObjectRecipientsItemJSON {
   "metadata"?: Record<string, string>;
 }
 
+/** MessageObjectRecipientsItem in the API format as an argument: a nested model may also be given as a model. */
+export type MessageObjectRecipientsItemInput = MessageObjectRecipientsItemJSON;
+
 /** Fields of new MessageObjectRecipientsItem(): a nested model may be a plain object in the API format. */
 export interface MessageObjectRecipientsItemInit {
   /** Recipient email */
@@ -437,6 +474,9 @@ export interface MessageObjectOptionsJSON {
   "smtp_pool_id"?: string;
 }
 
+/** MessageObjectOptions in the API format as an argument: a nested model may also be given as a model. */
+export type MessageObjectOptionsInput = MessageObjectOptionsJSON;
+
 /** Fields of new MessageObjectOptions(): a nested model may be a plain object in the API format. */
 export interface MessageObjectOptionsInit {
   /**
@@ -493,6 +533,9 @@ export interface EmailSendResponseJSON {
   "emails"?: Array<string>;
   "failed_emails"?: Record<string, string>;
 }
+
+/** EmailSendResponse in the API format as an argument: a nested model may also be given as a model. */
+export type EmailSendResponseInput = EmailSendResponseJSON;
 
 /** Fields of new EmailSendResponse(): a nested model may be a plain object in the API format. */
 export interface EmailSendResponseInit {
@@ -571,6 +614,9 @@ export interface EmailSubscribeRequestJSON {
   "from_name": string;
   "to_email": string;
 }
+
+/** EmailSubscribeRequest in the API format as an argument: a nested model may also be given as a model. */
+export type EmailSubscribeRequestInput = EmailSubscribeRequestJSON;
 
 /** Fields of new EmailSubscribeRequest(): a nested model may be a plain object in the API format. */
 export interface EmailSubscribeRequestInit {

@@ -29,6 +29,9 @@ export interface ObsoleteUnsubscribedSetRequestJSON {
   "address": string;
 }
 
+/** ObsoleteUnsubscribedSetRequest in the API format as an argument: a nested model may also be given as a model. */
+export type ObsoleteUnsubscribedSetRequestInput = ObsoleteUnsubscribedSetRequestJSON;
+
 /** Fields of new ObsoleteUnsubscribedSetRequest(): a nested model may be a plain object in the API format. */
 export interface ObsoleteUnsubscribedSetRequestInit {
   /** Email to be unsubscribed. */
@@ -52,6 +55,9 @@ export interface ObsoleteUnsubscribedSetResponseJSON {
   "address"?: string;
   "message"?: ObsoleteUnsubscribedSetMessage;
 }
+
+/** ObsoleteUnsubscribedSetResponse in the API format as an argument: a nested model may also be given as a model. */
+export type ObsoleteUnsubscribedSetResponseInput = ObsoleteUnsubscribedSetResponseJSON;
 
 /** Fields of new ObsoleteUnsubscribedSetResponse(): a nested model may be a plain object in the API format. */
 export interface ObsoleteUnsubscribedSetResponseInit {
@@ -103,6 +109,9 @@ export interface ObsoleteUnsubscribedCheckRequestJSON {
   "address": string;
 }
 
+/** ObsoleteUnsubscribedCheckRequest in the API format as an argument: a nested model may also be given as a model. */
+export type ObsoleteUnsubscribedCheckRequestInput = ObsoleteUnsubscribedCheckRequestJSON;
+
 /** Fields of new ObsoleteUnsubscribedCheckRequest(): a nested model may be a plain object in the API format. */
 export interface ObsoleteUnsubscribedCheckRequestInit {
   /** Email to check. */
@@ -126,6 +135,9 @@ export interface ObsoleteUnsubscribedCheckResponseJSON {
   "address"?: string;
   "is_unsubscribed"?: boolean;
 }
+
+/** ObsoleteUnsubscribedCheckResponse in the API format as an argument: a nested model may also be given as a model. */
+export type ObsoleteUnsubscribedCheckResponseInput = ObsoleteUnsubscribedCheckResponseJSON;
 
 /** Fields of new ObsoleteUnsubscribedCheckResponse(): a nested model may be a plain object in the API format. */
 export interface ObsoleteUnsubscribedCheckResponseInit {
@@ -163,6 +175,9 @@ export interface ObsoleteUnsubscribedListRequestJSON {
   "date_from"?: string;
 }
 
+/** ObsoleteUnsubscribedListRequest in the API format as an argument: a nested model may also be given as a model. */
+export type ObsoleteUnsubscribedListRequestInput = ObsoleteUnsubscribedListRequestJSON;
+
 /** Fields of new ObsoleteUnsubscribedListRequest(): a nested model may be a plain object in the API format. */
 export interface ObsoleteUnsubscribedListRequestInit {
   /**
@@ -192,6 +207,12 @@ export interface ObsoleteUnsubscribedListResponseJSON {
   "unsubscribed"?: Array<ObsoleteUnsubscribedListResponseUnsubscribedItemJSON>;
 }
 
+/** ObsoleteUnsubscribedListResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface ObsoleteUnsubscribedListResponseInput {
+  "status"?: string;
+  "unsubscribed"?: Array<ObsoleteUnsubscribedListResponseUnsubscribedItem | ObsoleteUnsubscribedListResponseUnsubscribedItemInput>;
+}
+
 /** Fields of new ObsoleteUnsubscribedListResponse(): a nested model may be a plain object in the API format. */
 export interface ObsoleteUnsubscribedListResponseInit {
   /**
@@ -200,7 +221,7 @@ export interface ObsoleteUnsubscribedListResponseInit {
    */
   status?: string;
   /** Array of object describing unsubscribed emails. */
-  unsubscribed?: Array<ObsoleteUnsubscribedListResponseUnsubscribedItem | ObsoleteUnsubscribedListResponseUnsubscribedItemJSON>;
+  unsubscribed?: Array<ObsoleteUnsubscribedListResponseUnsubscribedItem | ObsoleteUnsubscribedListResponseUnsubscribedItemInput>;
 }
 
 /** ObsoleteUnsubscribedListResponse */
@@ -224,6 +245,9 @@ export interface ObsoleteUnsubscribedListResponseUnsubscribedItemJSON {
   "address"?: string;
   "unsubscribed_on"?: string;
 }
+
+/** ObsoleteUnsubscribedListResponseUnsubscribedItem in the API format as an argument: a nested model may also be given as a model. */
+export type ObsoleteUnsubscribedListResponseUnsubscribedItemInput = ObsoleteUnsubscribedListResponseUnsubscribedItemJSON;
 
 /** Fields of new ObsoleteUnsubscribedListResponseUnsubscribedItem(): a nested model may be a plain object in the API format. */
 export interface ObsoleteUnsubscribedListResponseUnsubscribedItemInit {

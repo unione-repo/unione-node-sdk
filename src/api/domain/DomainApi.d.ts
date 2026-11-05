@@ -1,6 +1,6 @@
 // DomainApi: API methods of the Domain section.
 import type { ApiClient } from "../../client/ApiClient.js";
-import type { DomainDeleteRequest, DomainDeleteRequestJSON, DomainDeleteResponse, DomainGetDnsRecordsRequest, DomainGetDnsRecordsRequestJSON, DomainGetDnsRecordsResponse, DomainGetSandboxDomainResponse, DomainListRequest, DomainListRequestJSON, DomainListResponse, DomainValidateDkimRequest, DomainValidateDkimRequestJSON, DomainValidateDkimResponse, DomainValidateVerificationRecordRequest, DomainValidateVerificationRecordRequestJSON, DomainValidateVerificationRecordResponse } from "./models.js";
+import type { DomainDeleteRequest, DomainDeleteRequestInput, DomainDeleteResponse, DomainGetDnsRecordsRequest, DomainGetDnsRecordsRequestInput, DomainGetDnsRecordsResponse, DomainGetSandboxDomainResponse, DomainListRequest, DomainListRequestInput, DomainListResponse, DomainValidateDkimRequest, DomainValidateDkimRequestInput, DomainValidateDkimResponse, DomainValidateVerificationRecordRequest, DomainValidateVerificationRecordRequestInput, DomainValidateVerificationRecordResponse } from "./models.js";
 
 /**
  * You can use these methods to setup sender domains and check their statuses. They might be useful in
@@ -48,7 +48,7 @@ export declare class DomainApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#domain-get-dns-records
    * @throws {ApiError}
    */
-  getDnsRecords(request: DomainGetDnsRecordsRequest | DomainGetDnsRecordsRequestJSON): Promise<DomainGetDnsRecordsResponse>;
+  getDnsRecords(request: DomainGetDnsRecordsRequest | DomainGetDnsRecordsRequestInput): Promise<DomainGetDnsRecordsResponse>;
 
   /**
    * Triggers verification record validation for domain.
@@ -61,7 +61,7 @@ export declare class DomainApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#domain-validate-verification-record
    * @throws {ApiError}
    */
-  validateVerificationRecord(request: DomainValidateVerificationRecordRequest | DomainValidateVerificationRecordRequestJSON): Promise<DomainValidateVerificationRecordResponse>;
+  validateVerificationRecord(request: DomainValidateVerificationRecordRequest | DomainValidateVerificationRecordRequestInput): Promise<DomainValidateVerificationRecordResponse>;
 
   /**
    * Validates DKIM record for domain.
@@ -74,7 +74,7 @@ export declare class DomainApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#domain-validate-dkim
    * @throws {ApiError}
    */
-  validateDkim(request: DomainValidateDkimRequest | DomainValidateDkimRequestJSON): Promise<DomainValidateDkimResponse>;
+  validateDkim(request: DomainValidateDkimRequest | DomainValidateDkimRequestInput): Promise<DomainValidateDkimResponse>;
 
   /**
    * Returns a list of all registered domains for user or project, together with statuses of last
@@ -86,7 +86,7 @@ export declare class DomainApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#domain-list
    * @throws {ApiError}
    */
-  list(request?: DomainListRequest | DomainListRequestJSON): Promise<DomainListResponse>;
+  list(request?: DomainListRequest | DomainListRequestInput): Promise<DomainListResponse>;
 
   /**
    * Creates a sandbox domain for the account or returns the existing one.
@@ -114,5 +114,5 @@ export declare class DomainApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#domain-delete
    * @throws {ApiError}
    */
-  delete(request: DomainDeleteRequest | DomainDeleteRequestJSON): Promise<DomainDeleteResponse>;
+  delete(request: DomainDeleteRequest | DomainDeleteRequestInput): Promise<DomainDeleteResponse>;
 }

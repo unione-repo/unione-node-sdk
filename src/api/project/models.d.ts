@@ -6,10 +6,15 @@ export interface ProjectCreateRequestJSON {
   "project": ProjectObjectJSON;
 }
 
+/** ProjectCreateRequest in the API format as an argument: a nested model may also be given as a model. */
+export interface ProjectCreateRequestInput {
+  "project": ProjectObject | ProjectObjectInput;
+}
+
 /** Fields of new ProjectCreateRequest(): a nested model may be a plain object in the API format. */
 export interface ProjectCreateRequestInit {
   /** Object with project properties. */
-  project: ProjectObject | ProjectObjectJSON;
+  project: ProjectObject | ProjectObjectInput;
 }
 
 /** ProjectCreateRequest */
@@ -32,6 +37,9 @@ export interface ProjectObjectJSON {
   "backend_domain_id"?: number;
   "unsubscribe_page_id"?: number;
 }
+
+/** ProjectObject in the API format as an argument: a nested model may also be given as a model. */
+export type ProjectObjectInput = ProjectObjectJSON;
 
 /** Fields of new ProjectObject(): a nested model may be a plain object in the API format. */
 export interface ProjectObjectInit {
@@ -121,6 +129,9 @@ export interface ProjectCreateResponseJSON {
   "project_api_key"?: string;
 }
 
+/** ProjectCreateResponse in the API format as an argument: a nested model may also be given as a model. */
+export type ProjectCreateResponseInput = ProjectCreateResponseJSON;
+
 /** Fields of new ProjectCreateResponse(): a nested model may be a plain object in the API format. */
 export interface ProjectCreateResponseInit {
   /**
@@ -165,6 +176,13 @@ export interface ProjectUpdateRequestJSON {
   "project": ProjectUpdateObjectJSON;
 }
 
+/** ProjectUpdateRequest in the API format as an argument: a nested model may also be given as a model. */
+export interface ProjectUpdateRequestInput {
+  "project_id"?: string;
+  "project_api_key"?: string;
+  "project": ProjectUpdateObject | ProjectUpdateObjectInput;
+}
+
 /** Fields of new ProjectUpdateRequest(): a nested model may be a plain object in the API format. */
 export interface ProjectUpdateRequestInit {
   /**
@@ -178,7 +196,7 @@ export interface ProjectUpdateRequestInit {
    */
   projectApiKey?: string;
   /** Object with project properties. */
-  project: ProjectUpdateObject | ProjectUpdateObjectJSON;
+  project: ProjectUpdateObject | ProjectUpdateObjectInput;
 }
 
 /** ProjectUpdateRequest */
@@ -214,6 +232,9 @@ export interface ProjectUpdateObjectJSON {
   "email_counter_limit"?: number;
   "email_counter_mode"?: EmailCounterMode;
 }
+
+/** ProjectUpdateObject in the API format as an argument: a nested model may also be given as a model. */
+export type ProjectUpdateObjectInput = ProjectUpdateObjectJSON;
 
 /** Fields of new ProjectUpdateObject(): a nested model may be a plain object in the API format. */
 export interface ProjectUpdateObjectInit {
@@ -350,6 +371,9 @@ export interface ProjectUpdateResponseJSON {
   "project_api_key"?: string;
 }
 
+/** ProjectUpdateResponse in the API format as an argument: a nested model may also be given as a model. */
+export type ProjectUpdateResponseInput = ProjectUpdateResponseJSON;
+
 /** Fields of new ProjectUpdateResponse(): a nested model may be a plain object in the API format. */
 export interface ProjectUpdateResponseInit {
   /**
@@ -389,6 +413,9 @@ export interface ProjectListRequestJSON {
   "project_api_key"?: string;
 }
 
+/** ProjectListRequest in the API format as an argument: a nested model may also be given as a model. */
+export type ProjectListRequestInput = ProjectListRequestJSON;
+
 /** Fields of new ProjectListRequest(): a nested model may be a plain object in the API format. */
 export interface ProjectListRequestInit {
   /** Optional possibility to specify project_id to include only this project to list. */
@@ -416,6 +443,12 @@ export interface ProjectListResponseJSON {
   "projects"?: Array<ProjectListObjectJSON>;
 }
 
+/** ProjectListResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface ProjectListResponseInput {
+  "status"?: string;
+  "projects"?: Array<ProjectListObject | ProjectListObjectInput>;
+}
+
 /** Fields of new ProjectListResponse(): a nested model may be a plain object in the API format. */
 export interface ProjectListResponseInit {
   /**
@@ -424,7 +457,7 @@ export interface ProjectListResponseInit {
    */
   status?: string;
   /** Array of objects where each object represents one project. */
-  projects?: Array<ProjectListObject | ProjectListObjectJSON>;
+  projects?: Array<ProjectListObject | ProjectListObjectInput>;
 }
 
 /** ProjectListResponse */
@@ -458,6 +491,9 @@ export interface ProjectListObjectJSON {
   "email_counter_mode"?: EmailCounterMode;
   "unsubscribe_page_id"?: number;
 }
+
+/** ProjectListObject in the API format as an argument: a nested model may also be given as a model. */
+export type ProjectListObjectInput = ProjectListObjectJSON;
 
 /** Fields of new ProjectListObject(): a nested model may be a plain object in the API format. */
 export interface ProjectListObjectInit {
@@ -589,6 +625,9 @@ export interface ProjectDeleteRequestJSON {
   "project_id"?: string;
   "project_api_key"?: string;
 }
+
+/** ProjectDeleteRequest in the API format as an argument: a nested model may also be given as a model. */
+export type ProjectDeleteRequestInput = ProjectDeleteRequestJSON;
 
 /** Fields of new ProjectDeleteRequest(): a nested model may be a plain object in the API format. */
 export interface ProjectDeleteRequestInit {

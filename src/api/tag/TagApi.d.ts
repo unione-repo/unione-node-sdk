@@ -1,7 +1,7 @@
 // TagApi: API methods of the Tag section.
 import type { ApiClient } from "../../client/ApiClient.js";
 import type { SuccessResponse } from "../../common/models.js";
-import type { TagDeleteRequest, TagDeleteRequestJSON, TagListResponse } from "./models.js";
+import type { TagDeleteRequest, TagDeleteRequestInput, TagListResponse } from "./models.js";
 
 /**
  * This family of methods is used to manage user-defined tags. Tags are used to categorize letters
@@ -28,5 +28,5 @@ export declare class TagApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#tag-delete
    * @throws {ApiError}
    */
-  delete(request: TagDeleteRequest | TagDeleteRequestJSON): Promise<SuccessResponse>;
+  delete(request: TagDeleteRequest | TagDeleteRequestInput): Promise<SuccessResponse>;
 }

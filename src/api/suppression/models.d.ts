@@ -7,6 +7,9 @@ export interface SuppressionSetRequestJSON {
   "created"?: string;
 }
 
+/** SuppressionSetRequest in the API format as an argument: a nested model may also be given as a model. */
+export type SuppressionSetRequestInput = SuppressionSetRequestJSON;
+
 /** Fields of new SuppressionSetRequest(): a nested model may be a plain object in the API format. */
 export interface SuppressionSetRequestInit {
   /** Email to add in suppression list. */
@@ -64,6 +67,9 @@ export interface SuppressionGetRequestJSON {
   "all_projects"?: boolean;
 }
 
+/** SuppressionGetRequest in the API format as an argument: a nested model may also be given as a model. */
+export type SuppressionGetRequestInput = SuppressionGetRequestJSON;
+
 /** Fields of new SuppressionGetRequest(): a nested model may be a plain object in the API format. */
 export interface SuppressionGetRequestInit {
   /** Email to get suppression details for. */
@@ -100,6 +106,13 @@ export interface SuppressionGetResponseJSON {
   "suppressions"?: Array<SuppressionGetObjectJSON>;
 }
 
+/** SuppressionGetResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface SuppressionGetResponseInput {
+  "status"?: string;
+  "email"?: string;
+  "suppressions"?: Array<SuppressionGetObject | SuppressionGetObjectInput>;
+}
+
 /** Fields of new SuppressionGetResponse(): a nested model may be a plain object in the API format. */
 export interface SuppressionGetResponseInit {
   /**
@@ -110,7 +123,7 @@ export interface SuppressionGetResponseInit {
   /** The email for which suppression details were requested. */
   email?: string;
   /** Array of suppression objects. */
-  suppressions?: Array<SuppressionGetObject | SuppressionGetObjectJSON>;
+  suppressions?: Array<SuppressionGetObject | SuppressionGetObjectInput>;
 }
 
 /** SuppressionGetResponse */
@@ -139,6 +152,9 @@ export interface SuppressionGetObjectJSON {
   "is_deletable"?: boolean;
   "created"?: string;
 }
+
+/** SuppressionGetObject in the API format as an argument: a nested model may also be given as a model. */
+export type SuppressionGetObjectInput = SuppressionGetObjectJSON;
 
 /** Fields of new SuppressionGetObject(): a nested model may be a plain object in the API format. */
 export interface SuppressionGetObjectInit {
@@ -223,6 +239,9 @@ export interface SuppressionListRequestJSON {
   "cursor"?: string;
   "limit"?: number;
 }
+
+/** SuppressionListRequest in the API format as an argument: a nested model may also be given as a model. */
+export type SuppressionListRequestInput = SuppressionListRequestJSON;
 
 /** Fields of new SuppressionListRequest(): a nested model may be a plain object in the API format. */
 export interface SuppressionListRequestInit {
@@ -320,6 +339,13 @@ export interface SuppressionListResponseJSON {
   "cursor"?: string;
 }
 
+/** SuppressionListResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface SuppressionListResponseInput {
+  "status"?: string;
+  "suppressions"?: Array<SuppressionListObject | SuppressionListObjectInput>;
+  "cursor"?: string;
+}
+
 /** Fields of new SuppressionListResponse(): a nested model may be a plain object in the API format. */
 export interface SuppressionListResponseInit {
   /**
@@ -328,7 +354,7 @@ export interface SuppressionListResponseInit {
    */
   status?: string;
   /** Array of suppression objects. */
-  suppressions?: Array<SuppressionListObject | SuppressionListObjectJSON>;
+  suppressions?: Array<SuppressionListObject | SuppressionListObjectInput>;
   /**
    * The parameter indicates from which position the selection is to be started. Must be empty or omitted
    * for the first data chunk. In order to get subsequent chunks, you must set the "cursor" parameter in
@@ -367,6 +393,9 @@ export interface SuppressionListObjectJSON {
   "is_deletable"?: boolean;
   "created"?: string;
 }
+
+/** SuppressionListObject in the API format as an argument: a nested model may also be given as a model. */
+export type SuppressionListObjectInput = SuppressionListObjectJSON;
 
 /** Fields of new SuppressionListObject(): a nested model may be a plain object in the API format. */
 export interface SuppressionListObjectInit {
@@ -447,6 +476,9 @@ export declare class SuppressionListObject {
 export interface SuppressionDeleteRequestJSON {
   "email": string;
 }
+
+/** SuppressionDeleteRequest in the API format as an argument: a nested model may also be given as a model. */
+export type SuppressionDeleteRequestInput = SuppressionDeleteRequestJSON;
 
 /** Fields of new SuppressionDeleteRequest(): a nested model may be a plain object in the API format. */
 export interface SuppressionDeleteRequestInit {

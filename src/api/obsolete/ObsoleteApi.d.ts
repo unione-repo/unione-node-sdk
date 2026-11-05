@@ -1,6 +1,6 @@
 // ObsoleteApi: API methods of the Obsolete section.
 import type { ApiClient } from "../../client/ApiClient.js";
-import type { ObsoleteUnsubscribedCheckRequest, ObsoleteUnsubscribedCheckRequestJSON, ObsoleteUnsubscribedCheckResponse, ObsoleteUnsubscribedListRequest, ObsoleteUnsubscribedListRequestJSON, ObsoleteUnsubscribedListResponse, ObsoleteUnsubscribedSetRequest, ObsoleteUnsubscribedSetRequestJSON, ObsoleteUnsubscribedSetResponse } from "./models.js";
+import type { ObsoleteUnsubscribedCheckRequest, ObsoleteUnsubscribedCheckRequestInput, ObsoleteUnsubscribedCheckResponse, ObsoleteUnsubscribedListRequest, ObsoleteUnsubscribedListRequestInput, ObsoleteUnsubscribedListResponse, ObsoleteUnsubscribedSetRequest, ObsoleteUnsubscribedSetRequestInput, ObsoleteUnsubscribedSetResponse } from "./models.js";
 
 /**
  * Obsolete methods dealing with unsubscribes. We recommend using the more flexible
@@ -25,7 +25,7 @@ export declare class ObsoleteApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#unsubscribed-set
    * @throws {ApiError}
    */
-  unsubscribedSet(request: ObsoleteUnsubscribedSetRequest | ObsoleteUnsubscribedSetRequestJSON): Promise<ObsoleteUnsubscribedSetResponse>;
+  unsubscribedSet(request: ObsoleteUnsubscribedSetRequest | ObsoleteUnsubscribedSetRequestInput): Promise<ObsoleteUnsubscribedSetResponse>;
 
   /**
    * Checks if an email is unsubscribed.
@@ -33,7 +33,7 @@ export declare class ObsoleteApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#unsubscribed-check
    * @throws {ApiError}
    */
-  unsubscribedCheck(request: ObsoleteUnsubscribedCheckRequest | ObsoleteUnsubscribedCheckRequestJSON): Promise<ObsoleteUnsubscribedCheckResponse>;
+  unsubscribedCheck(request: ObsoleteUnsubscribedCheckRequest | ObsoleteUnsubscribedCheckRequestInput): Promise<ObsoleteUnsubscribedCheckResponse>;
 
   /**
    * Returns a list of all unsubscribed emails since provided date.
@@ -41,5 +41,5 @@ export declare class ObsoleteApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#unsubscribed-list
    * @throws {ApiError}
    */
-  unsubscribedList(request?: ObsoleteUnsubscribedListRequest | ObsoleteUnsubscribedListRequestJSON): Promise<ObsoleteUnsubscribedListResponse>;
+  unsubscribedList(request?: ObsoleteUnsubscribedListRequest | ObsoleteUnsubscribedListRequestInput): Promise<ObsoleteUnsubscribedListResponse>;
 }

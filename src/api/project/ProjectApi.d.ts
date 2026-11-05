@@ -1,7 +1,7 @@
 // ProjectApi: API methods of the Project section.
 import type { ApiClient } from "../../client/ApiClient.js";
 import type { SuccessResponse } from "../../common/models.js";
-import type { ProjectCreateRequest, ProjectCreateRequestJSON, ProjectCreateResponse, ProjectDeleteRequest, ProjectDeleteRequestJSON, ProjectListRequest, ProjectListRequestJSON, ProjectListResponse, ProjectUpdateRequest, ProjectUpdateRequestJSON, ProjectUpdateResponse } from "./models.js";
+import type { ProjectCreateRequest, ProjectCreateRequestInput, ProjectCreateResponse, ProjectDeleteRequest, ProjectDeleteRequestInput, ProjectListRequest, ProjectListRequestInput, ProjectListResponse, ProjectUpdateRequest, ProjectUpdateRequestInput, ProjectUpdateResponse } from "./models.js";
 
 /**
  * Projects allow you to group several independent domains, webhooks, templates, and unsubscription
@@ -27,7 +27,7 @@ export declare class ProjectApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#project-create
    * @throws {ApiError}
    */
-  create(request: ProjectCreateRequest | ProjectCreateRequestJSON): Promise<ProjectCreateResponse>;
+  create(request: ProjectCreateRequest | ProjectCreateRequestInput): Promise<ProjectCreateResponse>;
 
   /**
    * Updates a project.
@@ -35,7 +35,7 @@ export declare class ProjectApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#project-update
    * @throws {ApiError}
    */
-  update(request: ProjectUpdateRequest | ProjectUpdateRequestJSON): Promise<ProjectUpdateResponse>;
+  update(request: ProjectUpdateRequest | ProjectUpdateRequestInput): Promise<ProjectUpdateResponse>;
 
   /**
    * Lists projects.
@@ -43,7 +43,7 @@ export declare class ProjectApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#project-list
    * @throws {ApiError}
    */
-  list(request?: ProjectListRequest | ProjectListRequestJSON): Promise<ProjectListResponse>;
+  list(request?: ProjectListRequest | ProjectListRequestInput): Promise<ProjectListResponse>;
 
   /**
    * Deletes a project.
@@ -54,5 +54,5 @@ export declare class ProjectApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#project-delete
    * @throws {ApiError}
    */
-  delete(request?: ProjectDeleteRequest | ProjectDeleteRequestJSON): Promise<SuccessResponse>;
+  delete(request?: ProjectDeleteRequest | ProjectDeleteRequestInput): Promise<SuccessResponse>;
 }

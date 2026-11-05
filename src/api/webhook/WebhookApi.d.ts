@@ -1,7 +1,7 @@
 // WebhookApi: API methods of the Webhook section.
 import type { ApiClient } from "../../client/ApiClient.js";
 import type { SuccessResponse } from "../../common/models.js";
-import type { WebhookCallback, WebhookDeleteRequest, WebhookDeleteRequestJSON, WebhookGetRequest, WebhookGetRequestJSON, WebhookGetResponse, WebhookListRequest, WebhookListRequestJSON, WebhookListResponse, WebhookSetRequest, WebhookSetRequestJSON, WebhookSetResponse } from "./models.js";
+import type { WebhookCallback, WebhookDeleteRequest, WebhookDeleteRequestInput, WebhookGetRequest, WebhookGetRequestInput, WebhookGetResponse, WebhookListRequest, WebhookListRequestInput, WebhookListResponse, WebhookSetRequest, WebhookSetRequestInput, WebhookSetResponse } from "./models.js";
 
 /**
  * UniOne lets you recieve notifications about email status changes or spam blocks. You provide an URL
@@ -37,7 +37,7 @@ export declare class WebhookApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#webhook-set
    * @throws {ApiError}
    */
-  set(request: WebhookSetRequest | WebhookSetRequestJSON): Promise<WebhookSetResponse>;
+  set(request: WebhookSetRequest | WebhookSetRequestInput): Promise<WebhookSetResponse>;
 
   /**
    * Gets properties of a [webhook](https://docs.unione.io/en/web-api-ref#webhook).
@@ -45,7 +45,7 @@ export declare class WebhookApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#webhook-get
    * @throws {ApiError}
    */
-  get(request: WebhookGetRequest | WebhookGetRequestJSON): Promise<WebhookGetResponse>;
+  get(request: WebhookGetRequest | WebhookGetRequestInput): Promise<WebhookGetResponse>;
 
   /**
    * List all or some [webhooks](https://docs.unione.io/en/web-api-ref#webhook) (event notification
@@ -54,7 +54,7 @@ export declare class WebhookApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#webhook-list
    * @throws {ApiError}
    */
-  list(request?: WebhookListRequest | WebhookListRequestJSON): Promise<WebhookListResponse>;
+  list(request?: WebhookListRequest | WebhookListRequestInput): Promise<WebhookListResponse>;
 
   /**
    * Deletes an event notification handler
@@ -65,7 +65,7 @@ export declare class WebhookApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#webhook-delete
    * @throws {ApiError}
    */
-  delete(request: WebhookDeleteRequest | WebhookDeleteRequestJSON): Promise<SuccessResponse>;
+  delete(request: WebhookDeleteRequest | WebhookDeleteRequestInput): Promise<SuccessResponse>;
 
   /**
    * Webhook callback format description.

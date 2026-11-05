@@ -1,7 +1,7 @@
 // TemplateApi: API methods of the Template section.
 import type { ApiClient } from "../../client/ApiClient.js";
 import type { SuccessResponse } from "../../common/models.js";
-import type { TemplateDeleteRequest, TemplateDeleteRequestJSON, TemplateGetRequest, TemplateGetRequestJSON, TemplateGetResponse, TemplateListRequest, TemplateListRequestJSON, TemplateListResponse, TemplateSetRequest, TemplateSetRequestJSON, TemplateSetResponse } from "./models.js";
+import type { TemplateDeleteRequest, TemplateDeleteRequestInput, TemplateGetRequest, TemplateGetRequestInput, TemplateGetResponse, TemplateListRequest, TemplateListRequestInput, TemplateListResponse, TemplateSetRequest, TemplateSetRequestInput, TemplateSetResponse } from "./models.js";
 
 /**
  * You have the option of storing a template on the UniOne side and then using it by id, which is
@@ -22,7 +22,7 @@ export declare class TemplateApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#template-set
    * @throws {ApiError}
    */
-  set(request: TemplateSetRequest | TemplateSetRequestJSON): Promise<TemplateSetResponse>;
+  set(request: TemplateSetRequest | TemplateSetRequestInput): Promise<TemplateSetResponse>;
 
   /**
    * Gets template properties by it's id.
@@ -30,7 +30,7 @@ export declare class TemplateApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#template-get
    * @throws {ApiError}
    */
-  get(request: TemplateGetRequest | TemplateGetRequestJSON): Promise<TemplateGetResponse>;
+  get(request: TemplateGetRequest | TemplateGetRequestInput): Promise<TemplateGetResponse>;
 
   /**
    * Returns the list of all or some templates of the account.
@@ -41,7 +41,7 @@ export declare class TemplateApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#template-list
    * @throws {ApiError}
    */
-  list(request?: TemplateListRequest | TemplateListRequestJSON): Promise<TemplateListResponse>;
+  list(request?: TemplateListRequest | TemplateListRequestInput): Promise<TemplateListResponse>;
 
   /**
    * Deletes a template by id.
@@ -49,5 +49,5 @@ export declare class TemplateApi {
    * Documentation: https://docs.unione.io/en/web-api-ref#template-delete
    * @throws {ApiError}
    */
-  delete(request: TemplateDeleteRequest | TemplateDeleteRequestJSON): Promise<SuccessResponse>;
+  delete(request: TemplateDeleteRequest | TemplateDeleteRequestInput): Promise<SuccessResponse>;
 }

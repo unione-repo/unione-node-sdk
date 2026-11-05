@@ -6,6 +6,9 @@ export interface ConfirmedEmailRequestJSON {
   "email": string;
 }
 
+/** ConfirmedEmailRequest in the API format as an argument: a nested model may also be given as a model. */
+export type ConfirmedEmailRequestInput = ConfirmedEmailRequestJSON;
+
 /** Fields of new ConfirmedEmailRequest(): a nested model may be a plain object in the API format. */
 export interface ConfirmedEmailRequestInit {
   /** Email address to add or delete. */
@@ -29,6 +32,12 @@ export interface ConfirmedEmailCreateResponseJSON {
   "confirmed_email"?: ConfirmedEmailJSON;
 }
 
+/** ConfirmedEmailCreateResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface ConfirmedEmailCreateResponseInput {
+  "status"?: string;
+  "confirmed_email"?: ConfirmedEmail | ConfirmedEmailInput;
+}
+
 /** Fields of new ConfirmedEmailCreateResponse(): a nested model may be a plain object in the API format. */
 export interface ConfirmedEmailCreateResponseInit {
   /**
@@ -36,7 +45,7 @@ export interface ConfirmedEmailCreateResponseInit {
    * Allowed values: `success`.
    */
   status?: string;
-  confirmedEmail?: ConfirmedEmail | ConfirmedEmailJSON;
+  confirmedEmail?: ConfirmedEmail | ConfirmedEmailInput;
 }
 
 /** ConfirmedEmailCreateResponse */
@@ -59,6 +68,9 @@ export interface ConfirmedEmailJSON {
   "email"?: string;
   "status"?: VerificationRecordStatus;
 }
+
+/** ConfirmedEmail in the API format as an argument: a nested model may also be given as a model. */
+export type ConfirmedEmailInput = ConfirmedEmailJSON;
 
 /** Fields of new ConfirmedEmail(): a nested model may be a plain object in the API format. */
 export interface ConfirmedEmailInit {
@@ -85,6 +97,12 @@ export interface ConfirmedEmailListResponseJSON {
   "confirmed_emails"?: Array<ConfirmedEmailJSON>;
 }
 
+/** ConfirmedEmailListResponse in the API format as an argument: a nested model may also be given as a model. */
+export interface ConfirmedEmailListResponseInput {
+  "status"?: string;
+  "confirmed_emails"?: Array<ConfirmedEmail | ConfirmedEmailInput>;
+}
+
 /** Fields of new ConfirmedEmailListResponse(): a nested model may be a plain object in the API format. */
 export interface ConfirmedEmailListResponseInit {
   /**
@@ -92,7 +110,7 @@ export interface ConfirmedEmailListResponseInit {
    * Allowed values: `success`.
    */
   status?: string;
-  confirmedEmails?: Array<ConfirmedEmail | ConfirmedEmailJSON>;
+  confirmedEmails?: Array<ConfirmedEmail | ConfirmedEmailInput>;
 }
 
 /** ConfirmedEmailListResponse */
@@ -115,6 +133,9 @@ export interface ConfirmedEmailDeleteResponseJSON {
   "status"?: string;
   "message"?: string;
 }
+
+/** ConfirmedEmailDeleteResponse in the API format as an argument: a nested model may also be given as a model. */
+export type ConfirmedEmailDeleteResponseInput = ConfirmedEmailDeleteResponseJSON;
 
 /** Fields of new ConfirmedEmailDeleteResponse(): a nested model may be a plain object in the API format. */
 export interface ConfirmedEmailDeleteResponseInit {
